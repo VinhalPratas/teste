@@ -3,94 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <title>Sistema SantoryTec</title>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
   font-family:'Segoe UI',sans-serif;
   background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-  min-height:100vh;
+}
+
+.main{
   display:flex;
-  align-items:center;
   justify-content:center;
+  gap:20px;
+  padding:20px;
+  min-height:100vh;
+}
+
+.box{
+  min-height:650px;
+  display:flex;
+  flex-direction:column;
+  border-radius:18px;
+  padding:20px;
 }
 
 .container{
-  width:100%;
-  max-width:600px;
-  background:#ffffff;
-  border-radius:18px;
-  padding:30px;
+  width:600px;
+  background:#fff;
   box-shadow:0 20px 40px rgba(0,0,0,0.25);
-  animation:fadeIn 0.6s ease;
 }
 
-@keyframes fadeIn{
-  from{opacity:0; transform:translateY(20px)}
-  to{opacity:1; transform:translateY(0)}
+.side{
+  width:260px;
+  background:rgba(255,255,255,0.1);
+  color:white;
 }
 
-.logo{
-  width:160px;
-  display:block;
-  margin:0 auto 10px;
-}
-
-h2{
-  text-align:center;
-  margin-bottom:20px;
-  color:#1f2937;
-}
-
-select, input, textarea{
+select, input{
   width:100%;
-  padding:12px 14px;
+  padding:12px;
   margin-top:8px;
   border-radius:10px;
   border:1px solid #e5e7eb;
-  font-size:14px;
-  transition:0.3s;
 }
 
-select:focus, input:focus, textarea:focus{
-  border-color:#4facfe;
-  outline:none;
-  box-shadow:0 0 0 3px rgba(79,172,254,0.2);
+textarea{
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #e5e7eb;
+  resize:none;
+  color:#000;
+}
+
+#resultado{
+  height:220px;
+  margin-top:10px;
+  overflow:auto;
+}
+
+#atalhoResultado{
+  height:160px;
+  margin-top:10px;
 }
 
 button{
   width:100%;
   padding:12px;
-  margin-top:10px;
+  margin-top:8px;
   border:none;
   border-radius:12px;
-  font-size:14px;
-  font-weight:600;
-  cursor:pointer;
   background: linear-gradient(135deg,#4facfe,#00f2fe);
   color:white;
-  transition:all 0.3s ease;
-}
-
-button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 10px 20px rgba(0,0,0,0.2);
-}
-
-textarea{
-  height:180px;
-  margin-top:12px;
-  resize:none;
+  cursor:pointer;
 }
 
 .hidden{display:none}
+
+.logo{
+  width:160px;
+  margin:0 auto 10px;
+  display:block;
+}
+
+h2{text-align:center;margin-bottom:15px;}
 
 .section{
   margin-top:15px;
   padding:15px;
   border-radius:12px;
   background:#f9fafb;
-  border:1px solid #eee;
 }
 
 .footer{
@@ -100,17 +102,38 @@ textarea{
   color:#9ca3af;
 }
 
+/* 🔥 RADIO PERFEITO */
+.radio-group{
+  display:flex;
+  gap:30px;
+  margin-top:10px;
+}
+
+.radio-item{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  white-space:nowrap;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.radio-item input{
+  accent-color:#00c6ff;
+}
 </style>
 </head>
+
 <body>
 
-<div class="container">
+<div class="main">
+
+<!-- CENTRO -->
+<div class="container box">
 
 <img src="Logo tecnológico SantoryTec com design moderno.png" class="logo">
 <h2>Sistema de Mensagens automáticas</h2>
 
-
-  
 <select id="tipo" onchange="trocar()">
 <option value="">Selecione</option>
 <option value="exame">Agendamento Exame</option>
@@ -118,34 +141,84 @@ textarea{
 <option value="orcamento">Orçamento</option>
 </select>
 
+<!-- EXAME -->
 <div id="exame" class="hidden section">
 <input id="dataE" placeholder="Data">
 <input id="horaE" placeholder="Horário">
+
+<div class="radio-group">
+  <label class="radio-item">
+    <input type="radio" name="tipoE" value="Horário marcado">
+    <span>Horário marcado</span>
+  </label>
+
+  <label class="radio-item">
+    <input type="radio" name="tipoE" value="Ordem de chegada">
+    <span>Ordem de chegada</span>
+  </label>
+</div>
+
 <input id="exameNome" placeholder="Exame">
 <button onclick="gerarExame()">Gerar</button>
 </div>
 
+<!-- CONSULTA -->
 <div id="consulta" class="hidden section">
 <input id="dataC" placeholder="Data">
 <input id="horaC" placeholder="Horário">
+
+<div class="radio-group">
+  <label class="radio-item">
+    <input type="radio" name="tipoC" value="Horário marcado">
+    <span>Horário marcado</span>
+  </label>
+
+  <label class="radio-item">
+    <input type="radio" name="tipoC" value="Ordem de chegada">
+    <span>Ordem de chegada</span>
+  </label>
+</div>
+
 <input id="medico" placeholder="Médico">
 <button onclick="gerarConsulta()">Gerar</button>
 </div>
 
+<!-- ORÇAMENTO -->
 <div id="orcamento" class="hidden section">
 <div id="itens"></div>
 <button onclick="addItem()">+ Exame</button>
 <button onclick="gerarOrcamento()">Gerar</button>
 </div>
 
-<button onclick="copiar()">Copiar</button>
+<button onclick="copiar()">Copiar Mensagem</button>
+
 <textarea id="resultado" readonly></textarea>
 
 <div class="footer">Sistema SantoryTec</div>
-<div class="footer">By Kamilly Vitoria (62) 99385-8584</div>
+<div class="footer">By Kamilly Vitoria</div>
+
+</div>
+
+<!-- LATERAL -->
+<div class="side box">
+
+<h3>⚡ Mensagens prontas</h3>
+
+
+<button onclick="usarAtalho(`📄 Para autorização do(s) exame(s) pelo IPASGO, o pedido médico passa por auditoria e deve conter: indicação clínica, CID e estar legível.\nCaso falte alguma informação, será necessário solicitar a correção ao médico.`)">Dados P/Auditoria</button>
+
+<button onclick="usarAtalho(`📍 Clínica CTO Imagem e Medicina\nAvenida Santos Dumont N-836\nhttps://maps.app.goo.gl/Sc8cn8tPJgX6snUj6` )">Endereço</button>
+<textarea id="atalhoResultado" placeholder="Os atalhos aparecem aqui..."></textarea>
+
+<button onclick="copiarAtalho()">Copiar Atalho</button>
+<button onclick="limparAtalho()">Limpar</button>
+
+</div>
+
 </div>
 
 <script>
+
 function trocar(){
  document.getElementById('exame').classList.add('hidden');
  document.getElementById('consulta').classList.add('hidden');
@@ -158,17 +231,26 @@ function gerarExame(){
  let data=document.getElementById('dataE').value;
  let hora=document.getElementById('horaE').value;
  let exame=document.getElementById('exameNome').value;
- document.getElementById('resultado').value=`*Seu exame foi agendado:*\n\n🗓 Data: ${data}\n⏰ Horário: ${hora}\n📌 Exame: ${exame}\n\n⏳ Importante:\nPodem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.\n\nCaso tenha dúvidas, estamos à disposição!`;
+
+ let tipo = document.querySelector('input[name="tipoE"]:checked')?.value || "";
+ let info = tipo ? `${hora} - ${tipo}` : hora;
+
+ document.getElementById('resultado').value=`*Seu exame foi agendado:*\n\n🗓 Data: ${data}\n⏰ Horário: ${info}\n📌 Exame: ${exame}\n\n⏳ Importante:\nPodem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.\n\nCaso tenha dúvidas, estamos à disposição!`;
 }
 
 function gerarConsulta(){
  let data=document.getElementById('dataC').value;
  let hora=document.getElementById('horaC').value;
  let medico=document.getElementById('medico').value;
- document.getElementById('resultado').value=`*Sua consulta foi agendada:*\n\n🗓 Data: ${data}\n⏰ Horário: ${hora}\n👨‍⚕️ Médico: ${medico}\n\n⏳ Importante:\nPodem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.\n\nCaso tenha dúvidas, estamos à disposição!`;
+
+ let tipo = document.querySelector('input[name="tipoC"]:checked')?.value || "";
+ let info = tipo ? `${hora} - ${tipo}` : hora;
+
+ document.getElementById('resultado').value=`*Sua consulta foi agendada:*\n\n🗓 Data: ${data}\n⏰ Horário: ${info}\n👨‍⚕️ Médico: ${medico}\n\n⏳ Importante:\nPodem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.\n\nCaso tenha dúvidas, estamos à disposição!`;
 }
 
 let contador=0;
+
 function addItem(){
  contador++;
  let div=document.createElement('div');
@@ -195,7 +277,22 @@ function copiar(){
  document.execCommand('copy');
 }
 
+function usarAtalho(msg){
+ let area=document.getElementById('atalhoResultado');
+ area.value += (area.value ? "\n\n" : "") + msg;
+}
+
+function copiarAtalho(){
+ navigator.clipboard.writeText(document.getElementById('atalhoResultado').value);
+ alert("Atalho copiado!");
+}
+
+function limparAtalho(){
+ document.getElementById('atalhoResultado').value="";
+}
+
 addItem();
+
 </script>
 
 </body>
