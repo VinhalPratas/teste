@@ -62,11 +62,6 @@ textarea{
   overflow:auto;
 }
 
-#atalhoResultado{
-  height:160px;
-  margin-top:10px;
-}
-
 button{
   width:100%;
   padding:12px;
@@ -136,6 +131,7 @@ h2{text-align:center;margin-bottom:15px;}
 <option value="">Selecione</option>
 <option value="exame">Agendamento Exame</option>
 <option value="consulta">Agendamento Consulta</option>
+<option value="retorno">Agendamento Retorno</option>
 <option value="orcamento">Orçamento</option>
 </select>
 
@@ -177,12 +173,37 @@ h2{text-align:center;margin-bottom:15px;}
 </label>
 </div>
 
-<!-- 🔽 AQUI VOCÊ EDITA OS MÉDICOS -->
 <select id="medico">
+<option value="">Selecione o médico</option>
+<option value="ANTONIO CARLOS JORGE">ANTONIO CARLOS JORGE</option>
+<option value="ARTHUR LANNA APPELT">ARTHUR LANNA APPELT</option>
+</select>
+
+<button onclick="gerarConsulta()">Gerar</button>
+</div>
+
+<!-- RETORNO -->
+<div id="retorno" class="hidden section">
+<input id="dataR" placeholder="Data">
+<input id="horaR" placeholder="Horário">
+
+<div class="radio-group">
+<label class="radio-item">
+<input type="radio" name="tipoR" value="Horário marcado">
+<span>Horário marcado</span>
+</label>
+
+<label class="radio-item">
+<input type="radio" name="tipoR" value="Ordem de chegada">
+<span>Ordem de chegada</span>
+</label>
+</div>
+
+<select id="medicoR">
   <option value="">Selecione o médico</option>
   <option value="ANTONIO CARLOS JORGE">ANTONIO CARLOS JORGE</option>
   <option value="ARTHUR LANNA APPELT">ARTHUR LANNA APPELT</option>
-  <option value="CARLOS GALVAO VICTOR">CARLOS GALVAO VICTOR</option>
+<option value="CARLOS GALVAO VICTOR">CARLOS GALVAO VICTOR</option>
   <option value="DIEB A. AFIUNE">DIEB A. AFIUNE</option>
   <option value="DURVAL ARTHUR C. NOGUEIRA FILHO">DURVAL ARTHUR C. NOGUEIRA FILHO</option>
  <option value="FABIO ALESSANDRO GALVÃO PASSOS">FABIO ALESSANDRO GALVÃO PASSOS</option>
@@ -214,11 +235,10 @@ h2{text-align:center;margin-bottom:15px;}
 <option value="SAAD GEORGE OLIVEIRA EL HAOULI">SAAD GEORGE OLIVEIRA EL HAOULI </option>
 <option value="THIAGO LACERDA ATAIDES">THIAGO LACERDA ATAIDES</option>
 <option value="THYAGO DILENO RODRIGUES">THYAGO DILENO RODRIGUES</option>
-<option value="WILTON JOSE JURY">THYAGO DILENO RODRIGUES</option>
+<option value="WILTON JOSE JURY">WILTON JOSE JURY</option>
 </select>
-<!-- 🔼 -->
 
-<button onclick="gerarConsulta()">Gerar</button>
+<button onclick="gerarRetorno()">Gerar</button>
 </div>
 
 <!-- ORÇAMENTO -->
@@ -242,6 +262,7 @@ h2{text-align:center;margin-bottom:15px;}
 function trocar(){
  document.getElementById('exame').classList.add('hidden');
  document.getElementById('consulta').classList.add('hidden');
+ document.getElementById('retorno').classList.add('hidden');
  document.getElementById('orcamento').classList.add('hidden');
  let t=document.getElementById('tipo').value;
  if(t) document.getElementById(t).classList.remove('hidden');
@@ -267,6 +288,17 @@ function gerarConsulta(){
  let info = tipo ? `${hora} - ${tipo}` : hora;
 
  document.getElementById('resultado').value=`*Sua consulta foi agendada:*\n\n🗓 Data: ${data}\n⏰ Horário: ${info}\n👨‍⚕️ Médico: ${medico}\n\n⏳ Importante:\nPodem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.\n\nCaso tenha dúvidas, estamos à disposição!`;
+}
+
+function gerarRetorno(){
+ let data=document.getElementById('dataR').value;
+ let hora=document.getElementById('horaR').value;
+ let medico=document.getElementById('medicoR').value;
+
+ let tipo = document.querySelector('input[name="tipoR"]:checked')?.value || "";
+ let info = tipo ? `${hora} - ${tipo}` : hora;
+
+ document.getElementById('resultado').value=`*Seu retorno foi agendado:*\n\n🗓 Data: ${data}\n⏰ Horário: ${info}\n👨‍⚕️ Médico: ${medico}\n\n📌 Este atendimento é referente a retorno médico.\n\n⏳ Podem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.\n\nCaso tenha dúvidas, estamos à disposição!`;
 }
 
 let contador=0;
@@ -295,20 +327,6 @@ function copiar(){
  let area=document.getElementById('resultado');
  area.select();
  document.execCommand('copy');
-}
-
-function usarAtalho(msg){
- let area=document.getElementById('atalhoResultado');
- area.value += (area.value ? "\n\n" : "") + msg;
-}
-
-function copiarAtalho(){
- navigator.clipboard.writeText(document.getElementById('atalhoResultado').value);
- alert("Atalho copiado!");
-}
-
-function limparAtalho(){
- document.getElementById('atalhoResultado').value="";
 }
 
 addItem();
