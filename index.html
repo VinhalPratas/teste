@@ -134,6 +134,7 @@ h2{text-align:center;margin-bottom:15px;}
 <option value="consulta">Agendamento Consulta</option>
 <option value="retorno">Agendamento Retorno</option>
 <option value="orcamento">Orçamento</option>
+<option value="confirmacao">Confirmação</option>
 </select>
 
 <!-- EXAME -->
@@ -166,6 +167,35 @@ h2{text-align:center;margin-bottom:15px;}
 
 <input id="exameNomeEE" placeholder="Exame">
 <button onclick="gerarExameEncaixe()">Gerar</button>
+</div>
+
+<!-- CONFIRMAÇÃO -->
+<div id="confirmacao" class="hidden section">
+
+  <select id="servicoConfirmacao">
+    <option value="">Selecione o serviço</option>
+    <option value="Exame">Exame</option>
+    <option value="Consulta">Consulta</option>
+    <option value="Retorno">Retorno</option>
+  </select>
+
+  <input id="dataConfirmacao" placeholder="Data">
+  <input id="horaConfirmacao" placeholder="Horário">
+
+  <div class="radio-group">
+    <label class="radio-item">
+      <input type="radio" name="tipoConfirmacao" value="Horário marcado">
+      <span>Horário marcado</span>
+    </label>
+
+    <label class="radio-item">
+      <input type="radio" name="tipoConfirmacao" value="Ordem de chegada">
+      <span>Ordem de chegada</span>
+    </label>
+  </div>
+
+  <button onclick="gerarConfirmacao()">Gerar Confirmação</button>
+
 </div>
 
 <!-- CONSULTA -->
@@ -310,6 +340,8 @@ function trocar(){
  document.getElementById('consulta').classList.add('hidden');
  document.getElementById('retorno').classList.add('hidden');
  document.getElementById('orcamento').classList.add('hidden');
+ document.getElementById('confirmacao').classList.add('hidden');
+
  let t=document.getElementById('tipo').value;
  if(t) document.getElementById(t).classList.remove('hidden');
 }
@@ -373,10 +405,30 @@ function gerarOrcamento(){
   let ex=document.getElementById('ex'+i)?.value;
   let cv=document.getElementById('cv'+i)?.value;
   let vl=parseFloat(document.getElementById('vl'+i)?.value)||0;
-  if(ex){ txt+=`📌 ${ex} (${cv}) - R$ ${vl.toFixed(2)}\n`; total+=vl }
+  if(ex){
+    txt+=`📌 ${ex} (${cv}) - R$ ${vl.toFixed(2)}\n`;
+    total+=vl;
+  }
  }
  txt+=`\n💰 Total: R$ ${total.toFixed(2)}\n\nPagamento em dinheiro, PIX e cartões de CRÉDITO e DÉBITO\nOferecemos parcelamento em até 2 vezes sem juros ou em até 10 vezes, com acréscimo.`;
  document.getElementById('resultado').value=txt;
+}
+
+function gerarConfirmacao(){
+ let servico = document.getElementById('servicoConfirmacao').value;
+ let data = document.getElementById('dataConfirmacao').value;
+ let hora = document.getElementById('horaConfirmacao').value;
+
+ let tipo = document.querySelector('input[name="tipoConfirmacao"]:checked')?.value || "";
+
+ document.getElementById('resultado').value =
+ `*Confirmação de atendimento:*\n\n` +
+ `📌 Serviço: ${servico}\n` +
+ `🗓 Data: ${data}\n` +
+ `⏰ Horário: ${hora}\n` +
+ `📍 Tipo de atendimento: ${tipo}\n\n` +
+ `⏳ Reforçamos que o atendimento será realizado conforme o tipo selecionado.\n\n` +
+ `Caso tenha dúvidas, estamos à disposição!`;
 }
 
 function copiar(){
@@ -388,6 +440,7 @@ function copiar(){
 addItem();
 
 </script>
+
 
 </body>
 </html>
