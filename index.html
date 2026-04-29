@@ -2,527 +2,320 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Sistema SantoryTec</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Mensagens</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-body{
-  font-family:'Segoe UI',sans-serif;
-  background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+:root {
+    --primary: #0f172a;
+    --accent: #2563eb;
+    --border: #e2e8f0;
+    --bg: #f8fafc;
 }
 
-.main{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  padding:20px;
-  min-height:100vh;
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+body {
+    background-color: var(--bg);
+    background-image: radial-gradient(#cbd5e1 0.5px, transparent 0.5px);
+    background-size: 24px 24px;
+    min-height: 100vh;
+    display: flex; justify-content: center; align-items: center; padding: 20px;
 }
 
-.box{
-  min-height:650px;
-  display:flex;
-  flex-direction:column;
-  border-radius:18px;
-  padding:20px;
+.main { width: 100%; max-width: 600px; }
+
+.container {
+    background: #ffffff; border-radius: 16px; padding: 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid var(--border);
 }
 
-.container{
-  width:600px;
-  background:#fff;
-  box-shadow:0 20px 40px rgba(0,0,0,0.25);
+.logo { width: 130px; margin: 0 auto 15px; display: block; }
+
+h2 { color: var(--primary); font-weight: 700; font-size: 1.4rem; margin-bottom: 25px; text-align: center; }
+
+label { display: block; font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
+
+select, input, textarea {
+    width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px;
+    border: 1px solid var(--border); background: #ffffff; font-size: 14px; color: var(--primary);
 }
 
-.side{
-  width:260px;
-  background:rgba(255,255,255,0.1);
-  color:white;
+.section {
+    margin-top: 10px; padding: 20px; border-radius: 12px;
+    background: #f1f5f9; border: 1px solid var(--border); animation: slideUp 0.3s ease-out;
 }
 
-select, input{
-  width:100%;
-  padding:12px;
-  margin-top:8px;
-  border-radius:10px;
-  border:1px solid #e5e7eb;
+@keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+button {
+    width: 100%; padding: 12px; border: none; border-radius: 8px;
+    font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s;
 }
 
-textarea{
-  padding:12px;
-  border-radius:10px;
-  border:1px solid #e5e7eb;
-  resize:none;
-  color:#000;
-}
+.btn-generate { background: var(--primary); color: white; margin-top: 5px; }
+.btn-generate:hover { background: #000; }
 
-#resultado{
-  height:220px;
-  margin-top:10px;
-  overflow:auto;
-}
+.btn-copy { background: var(--accent); color: white; margin-top: 20px; font-size: 16px; }
 
-button{
-  width:100%;
-  padding:12px;
-  margin-top:8px;
-  border:none;
-  border-radius:12px;
-  background: linear-gradient(135deg,#4facfe,#00f2fe);
-  color:white;
-  cursor:pointer;
-}
+.btn-add { background: #fff; color: var(--primary); border: 1px solid var(--border); margin-bottom: 10px; }
+.btn-remove { background: #fee2e2; color: #b91c1c; width: auto; padding: 5px 10px; font-size: 11px; margin-top: 5px; display: block; margin-left: auto; }
 
-.hidden{display:none}
+#resultado { height: 180px; margin-top: 20px; background: #fdfdfd; border: 2px dashed var(--border); color: #334155; resize: none; }
 
-.logo{
-  width:160px;
-  margin:0 auto 10px;
-  display:block;
-}
+.radio-group { display: flex; gap: 15px; margin: 5px 0 15px 0; }
+.radio-item { display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 500; color: #475569; }
 
-h2{text-align:center;margin-bottom:15px;}
-
-.section{
-  margin-top:15px;
-  padding:15px;
-  border-radius:12px;
-  background:#f9fafb;
-}
-
-.footer{
-  text-align:center;
-  font-size:12px;
-  margin-top:10px;
-  color:#9ca3af;
-}
-
-.radio-group{
-  display:flex;
-  gap:30px;
-  margin-top:10px;
-}
-
-.radio-item{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  white-space:nowrap;
-  font-size:14px;
-  cursor:pointer;
-}
-
-.radio-item input{
-  accent-color:#00c6ff;
-}
-
-/* Estilo para os itens de orçamento ficarem organizados */
-.item-orcamento {
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-}
+.item-orcamento { background: #ffffff; padding: 12px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 10px; }
+.footer { text-align: center; font-size: 11px; margin-top: 15px; color: #94a3b8; }
+.hidden { display: none; }
 </style>
 </head>
 
 <body>
 
 <div class="main">
+    <div class="container">
+        <img src="Logo tecnológico SantoryTec com design moderno.png" class="logo">
+        <h2>Sistema de Mensagens</h2>
 
-<div class="container box">
+        <label>Selecione o Serviço</label>
+        <select id="tipo" onchange="trocar()">
+            <option value="">Selecione...</option>
+            <option value="exame">Agendamento Exame</option>
+            <option value="exameEncaixe">Exame Encaixe</option>
+            <option value="consulta">Agendamento Consulta</option>
+            <option value="retorno">Agendamento Retorno</option>
+            <option value="orcamento">Orçamento</option>
+            <option value="confirmacao">Confirmação</option>
+        </select>
 
-<img src="Logo tecnológico SantoryTec com design moderno.png" class="logo">
-<h2>Sistema de Mensagens automáticas</h2>
+        <!-- EXAME -->
+        <div id="exame" class="hidden section">
+            <input id="dataE" placeholder="Data">
+            <input id="horaE" placeholder="Horário">
+            <div class="radio-group">
+                <label class="radio-item"><input type="radio" name="tipoE" value="Horário marcado"> Horário marcado</label>
+                <label class="radio-item"><input type="radio" name="tipoE" value="Ordem de chegada"> Ordem de chegada</label>
+            </div>
+            <input id="exameNome" placeholder="Nome do Exame">
+            <button class="btn-generate" onclick="gerarExame()">Gerar Mensagem</button>
+        </div>
 
-<select id="tipo" onchange="trocar()">
-<option value="">Selecione</option>
-<option value="exame">Agendamento Exame</option>
-<option value="exameEncaixe">Exame Encaixe</option>
-<option value="consulta">Agendamento Consulta</option>
-<option value="retorno">Agendamento Retorno</option>
-<option value="orcamento">Orçamento</option>
-<option value="confirmacao">Confirmação</option>
-</select>
+        <!-- EXAME ENCAIXE -->
+        <div id="exameEncaixe" class="hidden section">
+            <input id="dataEE" placeholder="Data">
+            <input id="horaEE" placeholder="Horário">
+            <input id="exameNomeEE" placeholder="Nome do Exame">
+            <button class="btn-generate" onclick="gerarExameEncaixe()">Gerar Mensagem</button>
+        </div>
 
-<!-- EXAME -->
-<div id="exame" class="hidden section">
-<input id="dataE" placeholder="Data">
-<input id="horaE" placeholder="Horário">
+        <!-- CONSULTA -->
+        <div id="consulta" class="hidden section">
+            <input id="dataC" placeholder="Data">
+            <input id="horaC" placeholder="Horário">
+            <div class="radio-group">
+                <label class="radio-item"><input type="radio" name="tipoC" value="Horário marcado"> Horário marcado</label>
+                <label class="radio-item"><input type="radio" name="tipoC" value="Ordem de chegada"> Ordem de chegada</label>
+            </div>
+            <select id="medico">
+                <option value="ANTONIO CARLOS JORGE">ANTONIO CARLOS JORGE</option>
+                <option value="ARTHUR LANNA APPELT">ARTHUR LANNA APPELT</option>
+                <option value="CARLOS GALVAO VICTOR">CARLOS GALVAO VICTOR</option>
+                <option value="DIEB A. AFIUNE">DIEB A. AFIUNE</option>
+                <option value="DURVAL ARTHUR C. NOGUEIRA FILHO">DURVAL ARTHUR C. NOGUEIRA FILHO</option>
+                <option value="FABIO ALESSANDRO GALVÃO PASSOS">FABIO ALESSANDRO GALVÃO PASSOS</option>
+                <option value="FABRICIO GUIMARAES PRUDENTE">FABRICIO GUIMARAES PRUDENTE</option>
+                <option value="FERNANDA LOURENÇO RODRIGUES">FERNANDA LOURENÇO RODRIGUES</option>
+                <option value="FLAVIANO HENRIQUE PELLOSO BORGHESAN">FLAVIANO HENRIQUE PELLOSO BORGHESAN</option>
+                <option value="GLEBER FERNANDES OLIVEIRA">GLEBER FERNANDES OLIVEIRA</option>
+                <option value="GUILHERME ABRAHÃO AFIUNE">GUILHERME ABRAHÃO AFIUNE</option>
+                <option value="GUILHERME CUNHA DOS SANTOS TELES">GUILHERME CUNHA DOS SANTOS TELES</option>
+                <option value="GUSTAVO DE SOUSA CAMPOS JORGE">GUSTAVO DE SOUSA CAMPOS JORGE</option>
+                <option value="GUSTAVO PAVLIK HADDAD">GUSTAVO PAVLIK HADDAD</option>
+                <option value="HELDER ANDRADA">HELDER ANDRADA</option>
+                <option value="JAIME FLAVIO CAETANO">JAIME FLAVIO CAETANO</option>
+                <option value="JEAN LOUIS SCHOEPFER JUNIOR">JEAN LOUIS SCHOEPFER JUNIOR</option>
+                <option value="JORGE MIGUEL GONZALES DUTRA">JORGE MIGUEL GONZALES DUTRA</option>
+                <option value="JOSE VINICIUS TRONCONI">JOSE VINICIUS TRONCONI</option>
+                <option value="LEONARDO DRIESSEN RODRIGUES CARVALHO">LEONARDO DRIESSEN RODRIGUES CARVALHO</option>
+                <option value="LEONARDO GONÇALVES MONTALVÃO">LEONARDO GONÇALVES MONTALVÃO</option>
+                <option value="LUCAS ALMEIDA GUERRA">LUCAS ALMEIDA GUERRA</option>
+                <option value="LUCIANO LUCINDO DA SILVA">LUCIANO LUCINDO DA SILVA</option>
+                <option value="LUDMILA PAVLIK HADDAD">LUDMILA PAVLIK HADDAD</option>
+                <option value="MARCIO MATIAS DE OLIVEIRA">MARCIO MATIAS DE OLIVEIRA</option>
+                <option value="MARCO AURELIO G.A.BARBOSA">MARCO AURELIO G.A.BARBOSA</option>
+                <option value="MARCOS ALESSANDRO LEÃO">MARCOS ALESSANDRO LEÃO</option>
+                <option value="MAURO GAMERO ALVES DA COSTA">MAURO GAMERO ALVES DA COSTA</option>
+                <option value="NAIN NOGUEIRA MARQUES">NAIN NOGUEIRA MARQUES</option>
+                <option value="PAULO CESAR DA SILVA FRANCISCO">PAULO CESAR DA SILVA FRANCISCO</option>
+                <option value="RAZEM FARINHA ABRAHÃO">RAZEM FARINHA ABRAHÃO</option>
+                <option value="RICARDO CAMPOS SABAG">RICARDO CAMPOS SABAG</option>
+                <option value="SAAD GEORGE OLIVEIRA EL HAOULI">SAAD GEORGE OLIVEIRA EL HAOULI </option>
+                <option value="THIAGO LACERDA ATAIDES">THIAGO LACERDA ATAIDES</option>
+                <option value="THYAGO DILENO RODRIGUES">THYAGO DILENO RODRIGUES</option>
+                <option value="WILTON JOSE JURY">WILTON JOSE JURY</option>
+            </select>
+            <button class="btn-generate" onclick="gerarConsulta()">Gerar Mensagem</button>
+        </div>
 
-<div class="radio-group">
-<label class="radio-item">
-<input type="radio" name="tipoE" value="Horário marcado">
-<span>Horário marcado</span>
-</label>
+        <!-- RETORNO -->
+        <div id="retorno" class="hidden section">
+            <input id="dataR" placeholder="Data">
+            <input id="horaR" placeholder="Horário">
+            <div class="radio-group">
+                <label class="radio-item"><input type="radio" name="tipoR" value="Horário marcado"> Horário marcado</label>
+                <label class="radio-item"><input type="radio" name="tipoR" value="Ordem de chegada"> Ordem de chegada</label>
+            </div>
+            <select id="medicoR">
+                <option value="">Selecione o médico</option>
+                <option value="ANTONIO CARLOS JORGE">ANTONIO CARLOS JORGE</option>
+                <option value="ARTHUR LANNA APPELT">ARTHUR LANNA APPELT</option>
+                <option value="CARLOS GALVAO VICTOR">CARLOS GALVAO VICTOR</option>
+                <option value="DIEB A. AFIUNE">DIEB A. AFIUNE</option>
+                <option value="DURVAL ARTHUR C. NOGUEIRA FILHO">DURVAL ARTHUR C. NOGUEIRA FILHO</option>
+                <option value="FABIO ALESSANDRO GALVÃO PASSOS">FABIO ALESSANDRO GALVÃO PASSOS</option>
+                <option value="FABRICIO GUIMARAES PRUDENTE">FABRICIO GUIMARAES PRUDENTE</option>
+                <option value="FERNANDA LOURENÇO RODRIGUES">FERNANDA LOURENÇO RODRIGUES</option>
+                <option value="FLAVIANO HENRIQUE PELLOSO BORGHESAN">FLAVIANO HENRIQUE PELLOSO BORGHESAN</option>
+                <option value="GABRIELA MARINHO NAVES RABELO">GABRIELA MARINHO NAVES RABELO</option>
+                <option value="GLEBER FERNANDES OLIVEIRA">GLEBER FERNANDES OLIVEIRA</option>
+                <option value="GUILHERME ABRAHÃO AFIUNE">GUILHERME ABRAHÃO AFIUNE</option>
+                <option value="GUILHERME CUNHA DOS SANTOS TELES">GUILHERME CUNHA DOS SANTOS TELES</option>
+                <option value="GUSTAVO DE SOUSA CAMPOS JORGE">GUSTAVO DE SOUSA CAMPOS JORGE</option>
+                <option value="GUSTAVO PAVLIK HADDAD">GUSTAVO PAVLIK HADDAD</option>
+                <option value="HELDER ANDRADA">HELDER ANDRADA</option>
+                <option value="JAIME FLAVIO CAETANO">JAIME FLAVIO CAETANO</option>
+                <option value="JEAN LOUIS SCHOEPFER JUNIOR">JEAN LOUIS SCHOEPFER JUNIOR</option>
+                <option value="JORGE MIGUEL GONZALES DUTRA">JORGE MIGUEL GONZALES DUTRA</option>
+                <option value="JOSE VINICIUS TRONCONI">JOSE VINICIUS TRONCONI</option>
+                <option value="LEONARDO DRIESSEN RODRIGUES CARVALHO">LEONARDO DRIESSEN RODRIGUES CARVALHO</option>
+                <option value="LEONARDO GONÇALVES MONTALVÃO">LEONARDO GONÇALVES MONTALVÃO</option>
+                <option value="LUCAS ALMEIDA GUERRA">LUCAS ALMEIDA GUERRA</option>
+                <option value="LUCIANO LUCINDO DA SILVA">LUCIANO LUCINDO DA SILVA</option>
+                <option value="LUDMILA PAVLIK HADDAD">LUDMILA PAVLIK HADDAD</option>
+                <option value="MARCIO MATIAS DE OLIVEIRA">MARCIO MATIAS DE OLIVEIRA</option>
+                <option value="MARCO AURELIO G.A.BARBOSA">MARCO AURELIO G.A.BARBOSA</option>
+                <option value="MARCOS ALESSANDRO LEÃO">MARCOS ALESSANDRO LEÃO</option>
+                <option value="MAURO GAMERO ALVES DA COSTA">MAURO GAMERO ALVES DA COSTA</option>
+                <option value="NAIN NOGUEIRA MARQUES">NAIN NOGUEIRA MARQUES</option>
+                <option value="PAULO CESAR DA SILVA FRANCISCO">PAULO CESAR DA SILVA FRANCISCO</option>
+                <option value="RICARDO CAMPOS SABAG">RICARDO CAMPOS SABAG</option>
+                <option value="SAAD GEORGE OLIVEIRA EL HAOULI">SAAD GEORGE OLIVEIRA EL HAOULI </option>
+                <option value="THIAGO LACERDA ATAIDES">THIAGO LACERDA ATAIDES</option>
+                <option value="THYAGO DILENO RODRIGUES">THYAGO DILENO RODRIGUES</option>
+                <option value="WILTON JOSE JURY">WILTON JOSE JURY</option>
+            </select>
+            <button class="btn-generate" onclick="gerarRetorno()">Gerar Mensagem</button>
+        </div>
 
-<label class="radio-item">
-<input type="radio" name="tipoE" value="Ordem de chegada">
-<span>Ordem de chegada</span>
-</label>
-</div>
+        <!-- CONFIRMAÇÃO -->
+        <div id="confirmacao" class="hidden section">
+            <select id="servicoConfirmacao">
+                <option value="">Selecione o serviço</option>
+                <option value="Exame">Exame</option>
+                <option value="Consulta">Consulta</option>
+                <option value="Retorno">Retorno</option>
+            </select>
+            <input id="dataConfirmacao" placeholder="Data">
+            <input id="horaConfirmacao" placeholder="Horário">
+            <div class="radio-group">
+                <label class="radio-item"><input type="radio" name="tipoConfirmacao" value="Horário marcado"> Horário marcado</label>
+                <label class="radio-item"><input type="radio" name="tipoConfirmacao" value="Ordem de chegada"> Ordem de chegada</label>
+            </div>
+            <button class="btn-generate" onclick="gerarConfirmacao()">Gerar Confirmação</button>
+        </div>
 
-<input id="exameNome" placeholder="Exame">
-<button onclick="gerarExame()">Gerar</button>
-</div>
+        <!-- ORÇAMENTO -->
+        <div id="orcamento" class="hidden section">
+            <datalist id="listaExames">
+                <option value="Ecocardiograma transtorácico">
+                <option value="Eletrocardiograma-ECG">
+                <option value="Holter 24h">
+                <option value="Mapa 24h">
+                <option value="Teste Ergométrico">
+            </datalist>
+            <div id="itens"></div>
+            <button class="btn-add" onclick="addItem()">+ Adicionar Exame</button>
+            <button class="btn-generate" onclick="gerarOrcamento()">Gerar Orçamento</button>
+        </div>
 
-<!-- EXAME ENCAIXE -->
-<div id="exameEncaixe" class="hidden section">
-<input id="dataEE" placeholder="Data">
-<input id="horaEE" placeholder="Horário">
+        <textarea id="resultado" readonly placeholder="O texto gerado aparecerá aqui..."></textarea>
+        <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
 
-<p><strong>Tipo:</strong> Horário estimado</p>
-
-<input id="exameNomeEE" placeholder="Exame">
-<button onclick="gerarExameEncaixe()">Gerar</button>
-</div>
-
-<!-- CONFIRMAÇÃO -->
-<div id="confirmacao" class="hidden section">
-
-  <select id="servicoConfirmacao">
-    <option value="">Selecione o serviço</option>
-    <option value="Exame">Exame</option>
-    <option value="Consulta">Consulta</option>
-    <option value="Retorno">Retorno</option>
-  </select>
-
-  <input id="dataConfirmacao" placeholder="Data">
-  <input id="horaConfirmacao" placeholder="Horário">
-
-  <div class="radio-group">
-    <label class="radio-item">
-      <input type="radio" name="tipoConfirmacao" value="Horário marcado">
-      <span>Horário marcado</span>
-    </label>
-
-    <label class="radio-item">
-      <input type="radio" name="tipoConfirmacao" value="Ordem de chegada">
-      <span>Ordem de chegada</span>
-    </label>
-  </div>
-
-  <button onclick="gerarConfirmacao()">Gerar Confirmação</button>
-
-</div>
-
-<!-- CONSULTA -->
-<div id="consulta" class="hidden section">
-<input id="dataC" placeholder="Data">
-<input id="horaC" placeholder="Horário">
-
-<div class="radio-group">
-<label class="radio-item">
-<input type="radio" name="tipoC" value="Horário marcado">
-<span>Horário marcado</span>
-</label>
-
-<label class="radio-item">
-<input type="radio" name="tipoC" value="Ordem de chegada">
-<span>Ordem de chegada</span>
-</label>
-</div>
-
-<select id="medico">
-  <option value="ANTONIO CARLOS JORGE">ANTONIO CARLOS JORGE</option>
-  <option value="ARTHUR LANNA APPELT">ARTHUR LANNA APPELT</option>
-<option value="CARLOS GALVAO VICTOR">CARLOS GALVAO VICTOR</option>
-  <option value="DIEB A. AFIUNE">DIEB A. AFIUNE</option>
-  <option value="DURVAL ARTHUR C. NOGUEIRA FILHO">DURVAL ARTHUR C. NOGUEIRA FILHO</option>
- <option value="FABIO ALESSANDRO GALVÃO PASSOS">FABIO ALESSANDRO GALVÃO PASSOS</option>
- <option value="FABRICIO GUIMARAES PRUDENTE">FABRICIO GUIMARAES PRUDENTE</option>
- <option value="FERNANDA LOURENÇO RODRIGUES">FERNANDA LOURENÇO RODRIGUES</option>
- <option value="FLAVIANO HENRIQUE PELLOSO BORGHESAN">FLAVIANO HENRIQUE PELLOSO BORGHESAN</option>
-<option value="GABRIELA MARINHO NAVES RABELO">GABRIELA MARINHO NAVES RABELO</option>
- <option value="GLEBER FERNANDES OLIVEIRA">GLEBER FERNANDES OLIVEIRA</option>
- <option value="GUILHERME ABRAHÃO AFIUNE">GUILHERME ABRAHÃO AFIUNE</option>
- <option value="GUILHERME CUNHA DOS SANTOS TELES">GUILHERME CUNHA DOS SANTOS TELES</option>
- <option value="GUSTAVO DE SOUSA CAMPOS JORGE">GUSTAVO DE SOUSA CAMPOS JORGE</option>
- <option value="GUSTAVO PAVLIK HADDAD">GUSTAVO PAVLIK HADDAD</option>
- <option value="HELDER ANDRADA">HELDER ANDRADA</option>
- <option value="JAIME FLAVIO CAETANO">JAIME FLAVIO CAETANO</option>
- <option value="JEAN LOUIS SCHOEPFER JUNIOR">JEAN LOUIS SCHOEPFER JUNIOR</option>
- <option value="JORGE MIGUEL GONZALES DUTRA">JORGE MIGUEL GONZALES DUTRA</option>
- <option value="JOSE VINICIUS TRONCONI">JOSE VINICIUS TRONCONI</option>
- <option value="LEONARDO DRIESSEN RODRIGUES CARVALHO">LEONARDO DRIESSEN RODRIGUES CARVALHO</option>
- <option value="LEONARDO GONÇALVES MONTALVÃO">LEONARDO GONÇALVES MONTALVÃO</option>
- <option value="LUCAS ALMEIDA GUERRA">LUCAS ALMEIDA GUERRA</option>
- <option value="LUCIANO LUCINDO DA SILVA">LUCIANO LUCINDO DA SILVA</option>
- <option value="LUDMILA PAVLIK HADDAD">LUDMILA PAVLIK HADDAD</option>
- <option value="MARCIO MATIAS DE OLIVEIRA">MARCIO MATIAS DE OLIVEIRA</option>
- <option value="MARCO AURELIO  G.A.BARBOSA">MARCO AURELIO  G.A.BARBOSA</option>
- <option value="MARCOS ALESSANDRO LEÃO">MARCOS ALESSANDRO LEÃO</option>
- <option value="MAURO GAMERO ALVES DA COSTA">MAURO GAMERO ALVES DA COSTA</option>
- <option value="NAIN NOGUEIRA MARQUES">NAIN NOGUEIRA MARQUES</option>
- <option value="PAULO CESAR DA SILVA FRANCISCO">PAULO CESAR DA SILVA FRANCISCO</option>
-<option value="RAZEM FARINHA ABRAHÃO">RAZEM FARINHA ABRAHÃO</option>
-<option value="RICARDO CAMPOS SABAG">RICARDO CAMPOS SABAG</option>
-<option value="SAAD GEORGE OLIVEIRA EL HAOULI">SAAD GEORGE OLIVEIRA EL HAOULI </option>
-<option value="THIAGO LACERDA ATAIDES">THIAGO LACERDA ATAIDES</option>
-<option value="THYAGO DILENO RODRIGUES">THYAGO DILENO RODRIGUES</option>
-<option value="WILTON JOSE JURY">WILTON JOSE JURY</option>
-</select>
-
-<button onclick="gerarConsulta()">Gerar</button>
-</div>
-
-<!-- RETORNO -->
-<div id="retorno" class="hidden section">
-<input id="dataR" placeholder="Data">
-<input id="horaR" placeholder="Horário">
-
-<div class="radio-group">
-<label class="radio-item">
-<input type="radio" name="tipoR" value="Horário marcado">
-<span>Horário marcado</span>
-</label>
-
-<label class="radio-item">
-<input type="radio" name="tipoR" value="Ordem de chegada">
-<span>Ordem de chegada</span>
-</label>
-</div>
-
-<select id="medicoR">
-<option value="">Selecione o médico</option>
-  <option value="ANTONIO CARLOS JORGE">ANTONIO CARLOS JORGE</option>
-  <option value="ARTHUR LANNA APPELT">ARTHUR LANNA APPELT</option>
-<option value="CARLOS GALVAO VICTOR">CARLOS GALVAO VICTOR</option>
-  <option value="DIEB A. AFIUNE">DIEB A. AFIUNE</option>
-  <option value="DURVAL ARTHUR C. NOGUEIRA FILHO">DURVAL ARTHUR C. NOGUEIRA FILHO</option>
- <option value="FABIO ALESSANDRO GALVÃO PASSOS">FABIO ALESSANDRO GALVÃO PASSOS</option>
- <option value="FABRICIO GUIMARAES PRUDENTE">FABRICIO GUIMARAES PRUDENTE</option>
- <option value="FERNANDA LOURENÇO RODRIGUES">FERNANDA LOURENÇO RODRIGUES</option>
- <option value="FLAVIANO HENRIQUE PELLOSO BORGHESAN">FLAVIANO HENRIQUE PELLOSO BORGHESAN</option>
- <option value="GLEBER FERNANDES OLIVEIRA">GLEBER FERNANDES OLIVEIRA</option>
- <option value="GUILHERME ABRAHÃO AFIUNE">GUILHERME ABRAHÃO AFIUNE</option>
- <option value="GUILHERME CUNHA DOS SANTOS TELES">GUILHERME CUNHA DOS SANTOS TELES</option>
- <option value="GUSTAVO DE SOUSA CAMPOS JORGE">GUSTAVO DE SOUSA CAMPOS JORGE</option>
- <option value="GUSTAVO PAVLIK HADDAD">GUSTAVO PAVLIK HADDAD</option>
- <option value="HELDER ANDRADA">HELDER ANDRADA</option>
- <option value="JAIME FLAVIO CAETANO">JAIME FLAVIO CAETANO</option>
- <option value="JEAN LOUIS SCHOEPFER JUNIOR">JEAN LOUIS SCHOEPFER JUNIOR</option>
- <option value="JORGE MIGUEL GONZALES DUTRA">JORGE MIGUEL GONZALES DUTRA</option>
- <option value="JOSE VINICIUS TRONCONI">JOSE VINICIUS TRONCONI</option>
- <option value="LEONARDO DRIESSEN RODRIGUES CARVALHO">LEONARDO DRIESSEN RODRIGUES CARVALHO</option>
- <option value="LEONARDO GONÇALVES MONTALVÃO">LEONARDO GONÇALVES MONTALVÃO</option>
- <option value="LUCAS ALMEIDA GUERRA">LUCAS ALMEIDA GUERRA</option>
- <option value="LUCIANO LUCINDO DA SILVA">LUCIANO LUCINDO DA SILVA</option>
- <option value="LUDMILA PAVLIK HADDAD">LUDMILA PAVLIK HADDAD</option>
- <option value="MARCIO MATIAS DE OLIVEIRA">MARCIO MATIAS DE OLIVEIRA</option>
- <option value="MARCO AURELIO  G.A.BARBOSA">MARCO AURELIO  G.A.BARBOSA</option>
- <option value="MARCOS ALESSANDRO LEÃO">MARCOS ALESSANDRO LEÃO</option>
- <option value="MAURO GAMERO ALVES DA COSTA">MAURO GAMERO ALVES DA COSTA</option>
- <option value="NAIN NOGUEIRA MARQUES">NAIN NOGUEIRA MARQUES</option>
- <option value="PAULO CESAR DA SILVA FRANCISCO">PAULO CESAR DA SILVA FRANCISCO</option>
-<option value="RICARDO CAMPOS SABAG">RICARDO CAMPOS SABAG</option>
-<option value="SAAD GEORGE OLIVEIRA EL HAOULI">SAAD GEORGE OLIVEIRA EL HAOULI </option>
-<option value="THIAGO LACERDA ATAIDES">THIAGO LACERDA ATAIDES</option>
-<option value="THYAGO DILENO RODRIGUES">THYAGO DILENO RODRIGUES</option>
-<option value="WILTON JOSE JURY">WILTON JOSE JURY</option>
-</select>
-
-<button onclick="gerarRetorno()">Gerar</button>
-</div>
-
-<!-- ORÇAMENTO -->
-<div id="orcamento" class="hidden section">
-<!-- Datalist para Pesquisa de Exames -->
-<datalist id="listaExames">
-<option value="Ecocardiograma transtorácico">
-<option value="Eletrocardiograma-ECG">
-<option value="Holter 24h">
-<option value="Mapa 24h">
-<option value="Teste Ergométrico">
-<option value="Ultrassom das mamas ">
-<option value="Raio-X de Tórax">
-<option value="Ultrassom das mamas">
-<option value="Ultrassom de abdômen total">
-<option value="Ultrassom de abdômen superior">
-<option value="Ultrassom de abdômen inferior">
-<option value="Ultrassom pélvico">
-<option value="Ultrassom transvaginal">
-<option value="Ultrassom obstétrico">
-<option value="Ultrassom de rins e vias urinárias">
-<option value="Ultrassom de próstata">
-<option value="Ultrassom de tireoide">
-<option value="Ultrassom de partes moles">
-<option value="Ultrassom de ombro direito">
-<option value="Ultrassom de ombro esquerdo">
-<option value="Ultrassom de joelho direito">
-<option value="Ultrassom de joelho esquerdo">
-<option value="Ultrassom de cotovelo direito">
-<option value="Ultrassom de cotovelo esquerdo">
-<option value="Ultrassom de punho direito">
-<option value="Ultrassom de punho esquerdo">
-<option value="Ultrassom de tornozelo direito">
-<option value="Ultrassom de tornozelo esquerdo">
-<option value="Ultrassom de bolsa escrotal">
-<option value="Ultrassom de parede abdominal">
-<option value="Ressonância Magnética de Ombro Direito">
-<option value="Ressonância Magnética de Ombro Esquerdo">
-<option value="Ressonância Magnética de Joelho Direito">
-<option value="Ressonância Magnética de Joelho Esquerdo">
-<option value="Ressonância Magnética de Cotovelo Direito">
-<option value="Ressonância Magnética de Cotovelo Esquerdo">
-<option value="Ressonância Magnética de Punho Direito">
-<option value="Ressonância Magnética de Punho Esquerdo">
-<option value="Ressonância Magnética de Mão Direita">
-<option value="Ressonância Magnética de Mão Esquerda">
-<option value="Ressonância Magnética de Quadril Direito">
-<option value="Ressonância Magnética de Quadril Esquerdo">
-<option value="Ressonância Magnética de Coxa Direita">
-<option value="Ressonância Magnética de Coxa Esquerda">
-<option value="Ressonância Magnética de Perna Direita">
-<option value="Ressonância Magnética de Perna Esquerda">
-<option value="Ressonância Magnética de Tornozelo Direito">
-<option value="Ressonância Magnética de Tornozelo Esquerdo">
-<option value="Ressonância Magnética de Pé Direito">
-<option value="Ressonância Magnética de Pé Esquerdo">
-<option value="Ressonância Magnética de Braço Direito">
-<option value="Ressonância Magnética de Braço Esquerdo">
-<option value="Ressonância Magnética de Antebraço Direito">
-<option value="Ressonância Magnética de Antebraço Esquerdo">
-<option value="Ressonância Magnética de Crânio">
-<option value="Ressonância Magnética de Sela Túrcica">
-<option value="Ressonância Magnética de Órbitas">
-<option value="Ressonância Magnética de Mastoides">
-<option value="Ressonância Magnética de Face">
-<option value="Ressonância Magnética de Articulação Temporomandibular (ATM)">
-<option value="Ressonância Magnética de Pescoço">
-<option value="Angioressonância Magnética Arterial de Crânio">
-<option value="Angioressonância Magnética Venosa de Crânio">
-<option value="Angioressonância do Crânio">
-</datalist>
-
-  <div id="itens"></div>
-  <button onclick="addItem()">+ Adicionar Exame</button>
-  <button onclick="gerarOrcamento()">Gerar Mensagem</button>
-</div>
-
-<button onclick="copiar()">Copiar Mensagem</button>
-
-<textarea id="resultado" readonly></textarea>
-
-
-<div class="footer">Santorytec@gmail.com</div> <div class="footer">Kamilly Vitoria</div>
-
+        <div class="footer">Kamilly Vitoria | 2026</div>
+    </div>
 </div>
 
 <script>
-
 function trocar(){
- document.getElementById('exame').classList.add('hidden');
- document.getElementById('exameEncaixe').classList.add('hidden');
- document.getElementById('consulta').classList.add('hidden');
- document.getElementById('retorno').classList.add('hidden');
- document.getElementById('orcamento').classList.add('hidden');
- document.getElementById('confirmacao').classList.add('hidden');
-
- let t=document.getElementById('tipo').value;
- if(t) document.getElementById(t).classList.remove('hidden');
+    const secoes = ['exame', 'exameEncaixe', 'consulta', 'retorno', 'orcamento', 'confirmacao'];
+    secoes.forEach(s => document.getElementById(s).classList.add('hidden'));
+    let t = document.getElementById('tipo').value;
+    if(t) document.getElementById(t).classList.remove('hidden');
 }
 
 function gerarExame(){
- let data=document.getElementById('dataE').value;
- let hora=document.getElementById('horaE').value;
- let exame=document.getElementById('exameNome').value;
-
- let tipo = document.querySelector('input[name="tipoE"]:checked')?.value || "";
- let info = tipo ? `${hora} - ${tipo}` : hora;
-
- document.getElementById('resultado').value=`*Seu exame foi agendado:*\n\n🗓 Data: ${data}\n⏰ Horário: ${info}\n📌 Exame: ${exame}\n\n⏳ Importante:\nPodem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.\n\nCaso tenha dúvidas, estamos à disposição!`;
+    let data=document.getElementById('dataE').value, hora=document.getElementById('horaE').value, exame=document.getElementById('exameNome').value;
+    let tipo = document.querySelector('input[name="tipoE"]:checked')?.value || "";
+    document.getElementById('resultado').value=`*Seu exame foi agendado:*\n\n🗓 Data: ${data}\n⏰ Horário: ${hora} - ${tipo}\n📌 Exame: ${exame}\n\n⏳ Podem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.\n\nCaso tenha dúvidas, estamos à disposição!`;
 }
 
 function gerarExameEncaixe(){
- let data=document.getElementById('dataEE').value;
- let hora=document.getElementById('horaEE').value;
- let exame=document.getElementById('exameNomeEE').value;
-
- let info = `${hora} - Horário estimado`;
-
- document.getElementById('resultado').value=`*Seu exame foi agendado (Encaixe):*\n\n🗓 Data: ${data}\n⏰ Horário: ${info}\n📌 Exame: ${exame}\n\n⏳ Importante:\nSeu exame será realizado por encaixe, ou seja, você será atendido(a) entre um agendamento e outro, conforme o andamento dos exames do dia.\nNossa equipe faz o possível para que todos sejam atendidos com agilidade e cuidado, e seu exame será realizado assim que houver uma oportunidade na agenda.\n\nCaso tenha dúvidas, estamos à disposição!`;
+    let data=document.getElementById('dataEE').value, hora=document.getElementById('horaEE').value, exame=document.getElementById('exameNomeEE').value;
+    document.getElementById('resultado').value=`*Seu exame foi agendado (Encaixe):*\n\n🗓 Data: ${data}\n⏰ Horário: ${hora} - Horário estimado\n📌 Exame: ${exame}\n\n⏳ Seu exame será realizado por encaixe, ou seja, você será atendido(a) entre um agendamento e outro, conforme o andamento dos exames do dia.\nNossa equipe faz o possível para que todos sejam atendidos com agilidade e cuidado, e seu exame será realizado assim que houver uma oportunidade na agenda.\n\nCaso tenha dúvidas, estamos à disposição!`;
 }
 
 function gerarConsulta(){
- let data=document.getElementById('dataC').value;
- let hora=document.getElementById('horaC').value;
- let medico=document.getElementById('medico').value;
-
- let tipo = document.querySelector('input[name="tipoC"]:checked')?.value || "";
- let info = tipo ? `${hora} - ${tipo}` : hora;
-
- document.getElementById('resultado').value=`*Sua consulta foi agendada:*\n\n🗓 Data: ${data}\n⏰ Horário: ${info}\n👨‍⚕️ Médico: ${medico}\n\n⏳ Importante:\nPodem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.\n\nCaso tenha dúvidas, estamos à disposição!`;
+    let data=document.getElementById('dataC').value, hora=document.getElementById('horaC').value, medico=document.getElementById('medico').value;
+    let tipo = document.querySelector('input[name="tipoC"]:checked')?.value || "";
+    document.getElementById('resultado').value=`*Sua consulta foi agendada:*\n\n🗓 Data: ${data}\n⏰ Horário: ${hora} - ${tipo}\n👨‍⚕️ Médico: ${medico}\n\n⏳ Podem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.\n\nCaso tenha dúvidas, estamos à disposição!`;
 }
 
 function gerarRetorno(){
- let data=document.getElementById('dataR').value;
- let hora=document.getElementById('horaR').value;
- let medico=document.getElementById('medicoR').value;
-
- let tipo = document.querySelector('input[name="tipoR"]:checked')?.value || "";
- let info = tipo ? `${hora} - ${tipo}` : hora;
-
- document.getElementById('resultado').value=`*Seu retorno foi agendado:*\n\n🗓 Data: ${data}\n⏰ Horário: ${info}\n👨‍⚕️ Médico: ${medico}\n\n📌 Este atendimento é referente a retorno médico.\n\n⏳ Podem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.\n\nCaso tenha dúvidas, estamos à disposição!`;
-}
-
-let contador=0;
-
-function addItem(){
- contador++;
- let div=document.createElement('div');
- div.className = "item-orcamento";
- // O campo de input agora usa list="listaExames" para pesquisa
- div.innerHTML=`
-    <input id="ex${contador}" list="listaExames" placeholder="Pesquisar/Nome do Exame">
-    <input id="cv${contador}" placeholder="Convênio">
-    <input id="vl${contador}" type="number" placeholder="Valor (Ex: 150.00)">
- `;
- document.getElementById('itens').appendChild(div);
-}
-
-function gerarOrcamento(){
- let total=0;
- let txt="*Orçamento de Exames:*\n\n";
- for(let i=1;i<=contador;i++){
-  let ex=document.getElementById('ex'+i)?.value;
-  let cv=document.getElementById('cv'+i)?.value;
-  let vl=parseFloat(document.getElementById('vl'+i)?.value)||0;
-  if(ex){
-    txt+=`📌 ${ex} (${cv}) - R$ ${vl.toFixed(2)}\n`;
-    total+=vl;
-  }
- }
- txt+=`\n💰 Total: R$ ${total.toFixed(2)}\n\nPagamento em dinheiro, PIX e cartões de CRÉDITO e DÉBITO\nOferecemos parcelamento em até 2 vezes sem juros ou em até 10 vezes, com acréscimo.`;
- document.getElementById('resultado').value=txt;
+    let data=document.getElementById('dataR').value, hora=document.getElementById('horaR').value, medico=document.getElementById('medicoR').value;
+    let tipo = document.querySelector('input[name="tipoR"]:checked')?.value || "";
+    document.getElementById('resultado').value=`*Seu retorno foi agendado:*\n\n🗓 Data: ${data}\n⏰ Horário: ${hora} - ${tipo}\n👨‍⚕️ Médico: ${medico}\n\n📌 Este atendimento é referente a retorno médico.\n\n⏳ Podem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.\n\nCaso tenha dúvidas, estamos à disposição!`;
 }
 
 function gerarConfirmacao(){
- let servico = document.getElementById('servicoConfirmacao').value;
- let data = document.getElementById('dataConfirmacao').value;
- let hora = document.getElementById('horaConfirmacao').value;
+    let servico = document.getElementById('servicoConfirmacao').value, data = document.getElementById('dataConfirmacao').value, hora = document.getElementById('horaConfirmacao').value;
+    let tipo = document.querySelector('input[name="tipoConfirmacao"]:checked')?.value || "";
+    document.getElementById('resultado').value = `*Confirmação de atendimento:*\n\n📌 Tipo de atendimento: ${servico}\n🗓  Data: ${data}\n⏰ Horário: ${hora}\n📍  Tipo de atendimento: ${tipo}\n\n⚠️ Em caso de imprevisto ou necessidade de alteração, pedimos que entre em contato conosco com antecedência.\n\nCaso tenha dúvidas, estamos à disposição!`;
+}
 
- let tipo = document.querySelector('input[name="tipoConfirmacao"]:checked')?.value || "";
+let contador=0;
+function addItem(){
+    contador++;
+    let div=document.createElement('div');
+    div.className = "item-orcamento"; div.id = "item-"+contador;
+    div.innerHTML=`<input class="ex-i" list="listaExames" placeholder="Exame"><div style="display:flex; gap:10px"><input class="cv-i" placeholder="Convênio" style="flex:2"><input class="vl-i" type="number" placeholder="R$" style="flex:1"></div><button class="btn-remove" onclick="removerItem(${contador})">✖ Remover</button>`;
+    document.getElementById('itens').appendChild(div);
+}
 
- document.getElementById('resultado').value =
- `*Confirmação de atendimento:*\n\n` +
- `📌 Tipo de atendimento: ${servico}\n` +
- `🗓  Data: ${data}\n` +
- `⏰ Horário: ${hora}\n` +
- `📍  Tipo de atendimento: ${tipo}\n\n` +
- `⚠️ Em caso de imprevisto ou necessidade de alteração, pedimos que entre em contato conosco com antecedência.\n\n` +
- `Caso tenha dúvidas, estamos à disposição!`;
+function removerItem(id){ document.getElementById('item-'+id).remove(); }
+
+function gerarOrcamento(){
+    let total=0, txt="*Orçamento de Exames:*\n\n";
+    let itens = document.querySelectorAll('.item-orcamento');
+    itens.forEach(item => {
+        let ex=item.querySelector('.ex-i').value, cv=item.querySelector('.cv-i').value, vl=parseFloat(item.querySelector('.vl-i').value)||0;
+        if(ex){ txt+=`📌 ${ex} (${cv}) - R$ ${vl.toFixed(2)}\n`; total+=vl; }
+    });
+    txt+=`\n💰 Total: R$ ${total.toFixed(2)}\n\nPagamento em dinheiro, PIX e cartões de CRÉDITO e DÉBITO\nOferecemos parcelamento em até 2 vezes sem juros ou em até 10 vezes, com acréscimo.`;
+    document.getElementById('resultado').value=txt;
 }
 
 function copiar(){
- let area=document.getElementById('resultado');
- area.select();
- document.execCommand('copy');
+    let area=document.getElementById('resultado');
+    area.select(); document.execCommand('copy');
+    alert("Copiado!");
 }
 
 addItem();
-
 </script>
-
 
 </body>
 </html>
