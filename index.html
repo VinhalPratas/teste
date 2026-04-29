@@ -58,12 +58,13 @@ button {
 .btn-generate { background: var(--primary); color: white; margin-top: 5px; }
 .btn-generate:hover { background: #000; }
 
-.btn-copy { background: var(--accent); color: white; margin-top: 20px; font-size: 16px; }
+.btn-copy { background: var(--accent); color: white; margin-top: 8px; font-size: 14px; }
+.btn-copy:hover { background: #1d4ed8; }
 
 .btn-add { background: #fff; color: var(--primary); border: 1px solid var(--border); margin-bottom: 10px; }
 .btn-remove { background: #fee2e2; color: #b91c1c; width: auto; padding: 5px 10px; font-size: 11px; margin-top: 5px; display: block; margin-left: auto; }
 
-#resultado { height: 180px; margin-top: 20px; background: #fdfdfd; border: 2px dashed var(--border); color: #334155; resize: none; }
+#resultado { height: 180px; margin-top: 20px; background: #fdfdfd; border: 2px dashed var(--border); color: #334155; resize: none; margin-bottom: 0; }
 
 .radio-group { display: flex; gap: 15px; margin: 5px 0 15px 0; }
 .radio-item { display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 500; color: #475569; }
@@ -102,6 +103,7 @@ button {
             </div>
             <input id="exameNome" placeholder="Nome do Exame">
             <button class="btn-generate" onclick="gerarExame()">Gerar Mensagem</button>
+            <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
         </div>
 
         <!-- EXAME ENCAIXE -->
@@ -110,6 +112,7 @@ button {
             <input id="horaEE" placeholder="Horário">
             <input id="exameNomeEE" placeholder="Nome do Exame">
             <button class="btn-generate" onclick="gerarExameEncaixe()">Gerar Mensagem</button>
+            <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
         </div>
 
         <!-- CONSULTA -->
@@ -159,6 +162,7 @@ button {
                 <option value="WILTON JOSE JURY">WILTON JOSE JURY</option>
             </select>
             <button class="btn-generate" onclick="gerarConsulta()">Gerar Mensagem</button>
+            <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
         </div>
 
         <!-- RETORNO -->
@@ -209,6 +213,7 @@ button {
                 <option value="WILTON JOSE JURY">WILTON JOSE JURY</option>
             </select>
             <button class="btn-generate" onclick="gerarRetorno()">Gerar Mensagem</button>
+            <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
         </div>
 
         <!-- CONFIRMAÇÃO -->
@@ -226,6 +231,7 @@ button {
                 <label class="radio-item"><input type="radio" name="tipoConfirmacao" value="Ordem de chegada"> Ordem de chegada</label>
             </div>
             <button class="btn-generate" onclick="gerarConfirmacao()">Gerar Confirmação</button>
+            <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
         </div>
 
         <!-- ORÇAMENTO -->
@@ -240,10 +246,10 @@ button {
             <div id="itens"></div>
             <button class="btn-add" onclick="addItem()">+ Adicionar Exame</button>
             <button class="btn-generate" onclick="gerarOrcamento()">Gerar Orçamento</button>
+            <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
         </div>
 
         <textarea id="resultado" readonly placeholder="O texto gerado aparecerá aqui..."></textarea>
-        <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
 
         <div class="footer">Kamilly Vitoria | 2026</div>
     </div>
@@ -252,7 +258,13 @@ button {
 <script>
 function trocar(){
     const secoes = ['exame', 'exameEncaixe', 'consulta', 'retorno', 'orcamento', 'confirmacao'];
-    secoes.forEach(s => document.getElementById(s).classList.add('hidden'));
+    secoes.forEach(s => {
+        document.getElementById(s).classList.add('hidden');
+    });
+    
+    // Limpar o resultado ao trocar
+    document.getElementById('resultado').value = "";
+    
     let t = document.getElementById('tipo').value;
     if(t) document.getElementById(t).classList.remove('hidden');
 }
@@ -283,7 +295,7 @@ function gerarRetorno(){
 function gerarConfirmacao(){
     let servico = document.getElementById('servicoConfirmacao').value, data = document.getElementById('dataConfirmacao').value, hora = document.getElementById('horaConfirmacao').value;
     let tipo = document.querySelector('input[name="tipoConfirmacao"]:checked')?.value || "";
-    document.getElementById('resultado').value = `*Confirmação de atendimento:*\n\n📌 Tipo de atendimento: ${servico}\n🗓  Data: ${data}\n⏰ Horário: ${hora}\n📍  Tipo de atendimento: ${tipo}\n\n⚠️ Em caso de imprevisto ou necessidade de alteração, pedimos que entre em contato conosco com antecedência.\n\nCaso tenha dúvidas, estamos à disposição!`;
+    document.getElementById('resultado').value = `*Confirmação de atendimento:*\n\n📌 Tipo de atendimento: ${servico}\n🗓 Data: ${data}\n⏰ Horário: ${hora}\n📍 Tipo de atendimento: ${tipo}\n\n⚠️ Em caso de imprevisto ou necessidade de alteração, pedimos que entre em contato conosco com antecedência.\n\nCaso tenha dúvidas, estamos à disposição!`;
 }
 
 let contador=0;
@@ -310,8 +322,13 @@ function gerarOrcamento(){
 
 function copiar(){
     let area=document.getElementById('resultado');
-    area.select(); document.execCommand('copy');
-    alert("Copiado!");
+    if(area.value === "") {
+        alert("Gere uma mensagem primeiro!");
+        return;
+    }
+    area.select(); 
+    document.execCommand('copy');
+    alert("Copiado com sucesso!");
 }
 
 addItem();
