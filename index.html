@@ -115,6 +115,13 @@ h2{text-align:center;margin-bottom:15px;}
 .radio-item input{
   accent-color:#00c6ff;
 }
+
+/* Estilo para os itens de orçamento ficarem organizados */
+.item-orcamento {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
 </style>
 </head>
 
@@ -312,7 +319,6 @@ h2{text-align:center;margin-bottom:15px;}
 <option value="THIAGO LACERDA ATAIDES">THIAGO LACERDA ATAIDES</option>
 <option value="THYAGO DILENO RODRIGUES">THYAGO DILENO RODRIGUES</option>
 <option value="WILTON JOSE JURY">WILTON JOSE JURY</option>
-<!-- (mantive como estava no seu código original) -->
 </select>
 
 <button onclick="gerarRetorno()">Gerar</button>
@@ -320,9 +326,43 @@ h2{text-align:center;margin-bottom:15px;}
 
 <!-- ORÇAMENTO -->
 <div id="orcamento" class="hidden section">
-<div id="itens"></div>
-<button onclick="addItem()">+ Exame</button>
-<button onclick="gerarOrcamento()">Gerar</button>
+<!-- Datalist para Pesquisa de Exames -->
+<datalist id="listaExames">
+<option value="Ecocardiograma transtorácico">
+<option value="Eletrocardiograma-ECG">
+<option value="Holter 24h">
+<option value="Mapa 24h">
+<option value="Teste Ergométrico">
+<option value="Ultrassom das mamas ">
+<option value="Raio-X de Tórax">
+<option value="Ultrassom das mamas">
+<option value="Ultrassom de abdômen total">
+<option value="Ultrassom de abdômen superior">
+<option value="Ultrassom de abdômen inferior">
+<option value="Ultrassom pélvico">
+<option value="Ultrassom transvaginal">
+<option value="Ultrassom obstétrico">
+<option value="Ultrassom de rins e vias urinárias">
+<option value="Ultrassom de próstata">
+<option value="Ultrassom de tireoide">
+<option value="Ultrassom de partes moles">
+<option value="Ultrassom de ombro direito">
+<option value="Ultrassom de ombro esquerdo">
+<option value="Ultrassom de joelho direito">
+<option value="Ultrassom de joelho esquerdo">
+<option value="Ultrassom de cotovelo direito">
+<option value="Ultrassom de cotovelo esquerdo">
+<option value="Ultrassom de punho direito">
+<option value="Ultrassom de punho esquerdo">
+<option value="Ultrassom de tornozelo direito">
+<option value="Ultrassom de tornozelo esquerdo">
+<option value="Ultrassom de bolsa escrotal">
+<option value="Ultrassom de parede abdominal">
+</datalist>
+
+  <div id="itens"></div>
+  <button onclick="addItem()">+ Adicionar Exame</button>
+  <button onclick="gerarOrcamento()">Gerar Mensagem</button>
 </div>
 
 <button onclick="copiar()">Copiar Mensagem</button>
@@ -396,7 +436,13 @@ let contador=0;
 function addItem(){
  contador++;
  let div=document.createElement('div');
- div.innerHTML=`<input id="ex${contador}" placeholder="Exame"><input id="cv${contador}" placeholder="Convênio"><input id="vl${contador}" type="number" placeholder="Valor">`;
+ div.className = "item-orcamento";
+ // O campo de input agora usa list="listaExames" para pesquisa
+ div.innerHTML=`
+    <input id="ex${contador}" list="listaExames" placeholder="Pesquisar/Nome do Exame">
+    <input id="cv${contador}" placeholder="Convênio">
+    <input id="vl${contador}" type="number" placeholder="Valor (Ex: 150.00)">
+ `;
  document.getElementById('itens').appendChild(div);
 }
 
