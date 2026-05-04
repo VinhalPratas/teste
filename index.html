@@ -439,11 +439,27 @@ function trocar(){
 }
 
 function gerarExame(){
-    let data=document.getElementById('dataE').value, hora=document.getElementById('horaE').value, exame=document.getElementById('exameNome').value;
+    let data = document.getElementById('dataE').value;
+    let hora = document.getElementById('horaE').value;
+    let exame = document.getElementById('exameNome').value;
     let tipo = document.querySelector('input[name="tipoE"]:checked')?.value || "";
-    document.getElementById('resultado').value=`*Seu exame foi agendado:*\n\n🗓 Data: ${data}\n⏰ Horário: ${hora} - ${tipo}\n📌 Exame: ${exame}\n\n⏳ Podem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.\n\nCaso tenha dúvidas, estamos à disposição!`;
-}
 
+    document.getElementById('resultado').value = 
+`*Seu exame foi agendado:*
+
+🗓 Data: ${data}
+⏰ Horário: ${hora} - ${tipo}
+📌 Exame: ${exame}
+
+📍 *Endereço:*
+https://maps.app.goo.gl/Sc8cn8tPJgX6snUj6
+
+⚠️ *Trazer o pedido médico ORIGINAL, ASSINADO e CARIMBADO pelo médico(a).*
+
+⏳ Podem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.
+
+Caso tenha dúvidas, estamos à disposição!`;
+}
 function gerarExameEncaixe(){
     let data=document.getElementById('dataEE').value, hora=document.getElementById('horaEE').value, exame=document.getElementById('exameNomeEE').value;
     document.getElementById('resultado').value=`*Seu exame foi agendado (Encaixe):*\n\n🗓 Data: ${data}\n⏰ Horário: ${hora} - Horário estimado\n📌 Exame: ${exame}\n\n⏳ Seu exame será realizado por encaixe, ou seja, você será atendido(a) entre um agendamento e outro, conforme o andamento dos exames do dia.\nNossa equipe faz o possível para que todos sejam atendidos com agilidade e cuidado, e seu exame será realizado assim que houver uma oportunidade na agenda.\n\nCaso tenha dúvidas, estamos à disposição!`;
