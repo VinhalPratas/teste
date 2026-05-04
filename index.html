@@ -13,6 +13,7 @@
     --accent: #2563eb;
     --border: #e2e8f0;
     --bg: #f8fafc;
+    --danger: #ef4444;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
@@ -50,16 +51,21 @@ select, input, textarea {
 
 @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+.grid-botoes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
 button {
     width: 100%; padding: 12px; border: none; border-radius: 8px;
     font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s;
 }
 
-.btn-generate { background: var(--primary); color: white; margin-top: 5px; }
+.btn-generate { background: var(--primary); color: white; }
 .btn-generate:hover { background: #000; }
 
-.btn-copy { background: var(--accent); color: white; margin-top: 8px; font-size: 14px; }
+.btn-copy { background: var(--accent); color: white; font-size: 14px; grid-column: span 2; }
 .btn-copy:hover { background: #1d4ed8; }
+
+.btn-clear { background: #fff; color: var(--danger); border: 1px solid var(--danger); }
+.btn-clear:hover { background: #fef2f2; }
 
 .btn-add { background: #fff; color: var(--primary); border: 1px solid var(--border); margin-bottom: 10px; }
 .btn-remove { background: #fee2e2; color: #b91c1c; width: auto; padding: 5px 10px; font-size: 11px; margin-top: 5px; display: block; margin-left: auto; }
@@ -95,6 +101,7 @@ button {
 
         <!-- EXAME -->
         <div id="exame" class="hidden section">
+            <input id="pacienteE" placeholder="Nome do Paciente (Opcional)">
             <input id="dataE" placeholder="Data">
             <input id="horaE" placeholder="Horário">
             <div class="radio-group">
@@ -102,21 +109,29 @@ button {
                 <label class="radio-item"><input type="radio" name="tipoE" value="Ordem de chegada"> Ordem de chegada</label>
             </div>
             <input id="exameNome" placeholder="Nome do Exame">
-            <button class="btn-generate" onclick="gerarExame()">Gerar Mensagem</button>
-            <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
+            <div class="grid-botoes">
+                <button class="btn-clear" onclick="limparCampos('exame')">Limpar</button>
+                <button class="btn-generate" onclick="gerarExame()">Gerar</button>
+                <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
+            </div>
         </div>
 
         <!-- EXAME ENCAIXE -->
         <div id="exameEncaixe" class="hidden section">
+            <input id="pacienteEE" placeholder="Nome do Paciente (Opcional)">
             <input id="dataEE" placeholder="Data">
             <input id="horaEE" placeholder="Horário">
             <input id="exameNomeEE" placeholder="Nome do Exame">
-            <button class="btn-generate" onclick="gerarExameEncaixe()">Gerar Mensagem</button>
-            <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
+            <div class="grid-botoes">
+                <button class="btn-clear" onclick="limparCampos('exameEncaixe')">Limpar</button>
+                <button class="btn-generate" onclick="gerarExameEncaixe()">Gerar</button>
+                <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
+            </div>
         </div>
 
         <!-- CONSULTA -->
         <div id="consulta" class="hidden section">
+            <input id="pacienteC" placeholder="Nome do Paciente (Opcional)">
             <input id="dataC" placeholder="Data">
             <input id="horaC" placeholder="Horário">
             <div class="radio-group">
@@ -124,6 +139,7 @@ button {
                 <label class="radio-item"><input type="radio" name="tipoC" value="Ordem de chegada"> Ordem de chegada</label>
             </div>
             <select id="medico">
+                <option value="">Selecione o Médico</option>
                 <option value="ANTONIO CARLOS JORGE">ANTONIO CARLOS JORGE</option>
                 <option value="ARTHUR LANNA APPELT">ARTHUR LANNA APPELT</option>
                 <option value="CARLOS GALVAO VICTOR">CARLOS GALVAO VICTOR</option>
@@ -161,12 +177,16 @@ button {
                 <option value="THYAGO DILENO RODRIGUES">THYAGO DILENO RODRIGUES</option>
                 <option value="WILTON JOSE JURY">WILTON JOSE JURY</option>
             </select>
-            <button class="btn-generate" onclick="gerarConsulta()">Gerar Mensagem</button>
-            <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
+            <div class="grid-botoes">
+                <button class="btn-clear" onclick="limparCampos('consulta')">Limpar</button>
+                <button class="btn-generate" onclick="gerarConsulta()">Gerar</button>
+                <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
+            </div>
         </div>
 
         <!-- RETORNO -->
         <div id="retorno" class="hidden section">
+            <input id="pacienteR" placeholder="Nome do Paciente (Opcional)">
             <input id="dataR" placeholder="Data">
             <input id="horaR" placeholder="Horário">
             <div class="radio-group">
@@ -192,7 +212,7 @@ button {
                 <option value="HELDER ANDRADA">HELDER ANDRADA</option>
                 <option value="JAIME FLAVIO CAETANO">JAIME FLAVIO CAETANO</option>
                 <option value="JEAN LOUIS SCHOEPFER JUNIOR">JEAN LOUIS SCHOEPFER JUNIOR</option>
-                <option value="JORGE MIG SES GONZALES DUTRA">JORGE MIGUEL GONZALES DUTRA</option>
+                <option value="JORGE MIGUEL GONZALES DUTRA">JORGE MIGUEL GONZALES DUTRA</option>
                 <option value="JOSE VINICIUS TRONCONI">JOSE VINICIUS TRONCONI</option>
                 <option value="LEONARDO DRIESSEN RODRIGUES CARVALHO">LEONARDO DRIESSEN RODRIGUES CARVALHO</option>
                 <option value="LEONARDO GONÇALVES MONTALVÃO">LEONARDO GONÇALVES MONTALVÃO</option>
@@ -212,14 +232,18 @@ button {
                 <option value="THYAGO DILENO RODRIGUES">THYAGO DILENO RODRIGUES</option>
                 <option value="WILTON JOSE JURY">WILTON JOSE JURY</option>
             </select>
-            <button class="btn-generate" onclick="gerarRetorno()">Gerar Mensagem</button>
-            <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
+            <div class="grid-botoes">
+                <button class="btn-clear" onclick="limparCampos('retorno')">Limpar</button>
+                <button class="btn-generate" onclick="gerarRetorno()">Gerar</button>
+                <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
+            </div>
         </div>
 
         <!-- CONFIRMAÇÃO -->
         <div id="confirmacao" class="hidden section">
+            <input id="pacienteConf" placeholder="Nome do Paciente (Opcional)">
             <select id="servicoConfirmacao">
-                <option value="">Selecione o serviço</option>
+                <option value="">Selecione o tipo de atendimento</option>
                 <option value="Exame">Exame</option>
                 <option value="Consulta">Consulta</option>
                 <option value="Retorno">Retorno</option>
@@ -230,8 +254,11 @@ button {
                 <label class="radio-item"><input type="radio" name="tipoConfirmacao" value="Horário marcado"> Horário marcado</label>
                 <label class="radio-item"><input type="radio" name="tipoConfirmacao" value="Ordem de chegada"> Ordem de chegada</label>
             </div>
-            <button class="btn-generate" onclick="gerarConfirmacao()">Gerar Confirmação</button>
-            <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
+            <div class="grid-botoes">
+                <button class="btn-clear" onclick="limparCampos('confirmacao')">Limpar</button>
+                <button class="btn-generate" onclick="gerarConfirmacao()">Gerar</button>
+                <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
+            </div>
         </div>
 
         <!-- ORÇAMENTO -->
@@ -245,8 +272,11 @@ button {
             </datalist>
             <div id="itens"></div>
             <button class="btn-add" onclick="addItem()">+ Adicionar Exame</button>
-            <button class="btn-generate" onclick="gerarOrcamento()">Gerar Orçamento</button>
-            <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
+            <div class="grid-botoes">
+                <button class="btn-clear" onclick="limparCampos('orcamento')">Limpar Tudo</button>
+                <button class="btn-generate" onclick="gerarOrcamento()">Gerar</button>
+                <button class="btn-copy" onclick="copiar()">Copiar Mensagem</button>
+            </div>
         </div>
 
         <textarea id="resultado" readonly placeholder="O texto gerado aparecerá aqui..."></textarea>
@@ -256,27 +286,52 @@ button {
 </div>
 
 <script>
-// Configurações Padrão
 const enderecoPadrao = "📍 *Endereço:* \nhttps://maps.app.goo.gl/Sc8cn8tPJgX6snUj6";
 const avisoPedido = "⚠️ *Trazer o pedido médico ORIGINAL, ASSINADO e CARIMBADO pelo médico(a).*";
 
 function trocar(){
     const secoes = ['exame', 'exameEncaixe', 'consulta', 'retorno', 'orcamento', 'confirmacao'];
-    secoes.forEach(s => {
-        document.getElementById(s).classList.add('hidden');
-    });
+    secoes.forEach(s => document.getElementById(s).classList.add('hidden'));
     document.getElementById('resultado').value = "";
     let t = document.getElementById('tipo').value;
     if(t) document.getElementById(t).classList.remove('hidden');
 }
 
+function validar(dados) {
+    for (let campo in dados) {
+        if (!dados[campo]) {
+            alert(`Por favor, preencha o campo: ${campo}`);
+            return false;
+        }
+    }
+    return true;
+}
+
+function saudacao(nome) {
+    return nome ? `Olá, *${nome.trim()}*!\n\n` : "";
+}
+
+function limparCampos(id) {
+    const section = document.getElementById(id);
+    const inputs = section.querySelectorAll('input, select');
+    inputs.forEach(i => {
+        if (i.type === 'radio') i.checked = false;
+        else i.value = "";
+    });
+    if(id === 'orcamento') document.getElementById('itens').innerHTML = "";
+    document.getElementById('resultado').value = "";
+}
+
 function gerarExame(){
+    let nome = document.getElementById('pacienteE').value;
     let data = document.getElementById('dataE').value, hora = document.getElementById('horaE').value, 
         exame = document.getElementById('exameNome').value, 
         tipo = document.querySelector('input[name="tipoE"]:checked')?.value || "";
 
+    if(!validar({ "Data": data, "Horário": hora, "Nome do Exame": exame })) return;
+
     document.getElementById('resultado').value = 
-`*Seu exame foi agendado:*
+`${saudacao(nome)}*Seu exame foi agendado:*
 
 🗓 Data: ${data}
 ⏰ Horário: ${hora} - ${tipo}
@@ -292,11 +347,14 @@ Caso tenha dúvidas, estamos à disposição!`;
 }
 
 function gerarExameEncaixe(){
+    let nome = document.getElementById('pacienteEE').value;
     let data = document.getElementById('dataEE').value, hora = document.getElementById('horaEE').value, 
         exame = document.getElementById('exameNomeEE').value;
 
+    if(!validar({ "Data": data, "Horário": hora, "Nome do Exame": exame })) return;
+
     document.getElementById('resultado').value = 
-`*Seu exame foi agendado (Encaixe):*
+`${saudacao(nome)}*Seu exame foi agendado (Encaixe):*
 
 🗓 Data: ${data}
 ⏰ Horário: ${hora} - Horário estimado
@@ -312,12 +370,15 @@ Caso tenha dúvidas, estamos à disposição!`;
 }
 
 function gerarConsulta(){
+    let nome = document.getElementById('pacienteC').value;
     let data = document.getElementById('dataC').value, hora = document.getElementById('horaC').value, 
         medico = document.getElementById('medico').value, 
         tipo = document.querySelector('input[name="tipoC"]:checked')?.value || "";
 
+    if(!validar({ "Data": data, "Horário": hora, "Médico": medico })) return;
+
     document.getElementById('resultado').value = 
-`*Sua consulta foi agendada:*
+`${saudacao(nome)}*Sua consulta foi agendada:*
 
 🗓 Data: ${data}
 ⏰ Horário: ${hora} - ${tipo}
@@ -331,12 +392,15 @@ Caso tenha dúvidas, estamos à disposição!`;
 }
 
 function gerarRetorno(){
+    let nome = document.getElementById('pacienteR').value;
     let data = document.getElementById('dataR').value, hora = document.getElementById('horaR').value, 
         medico = document.getElementById('medicoR').value, 
         tipo = document.querySelector('input[name="tipoR"]:checked')?.value || "";
 
+    if(!validar({ "Data": data, "Horário": hora, "Médico": medico })) return;
+
     document.getElementById('resultado').value = 
-`*Seu retorno foi agendado:*
+`${saudacao(nome)}*Seu retorno foi agendado:*
 
 🗓 Data: ${data}
 ⏰ Horário: ${hora} - ${tipo}
@@ -352,16 +416,18 @@ Caso tenha dúvidas, estamos à disposição!`;
 }
 
 function gerarConfirmacao(){
+    let nome = document.getElementById('pacienteConf').value;
     let servico = document.getElementById('servicoConfirmacao').value, 
         data = document.getElementById('dataConfirmacao').value, 
         hora = document.getElementById('horaConfirmacao').value, 
         tipo = document.querySelector('input[name="tipoConfirmacao"]:checked')?.value || "";
     
-    // Mostra o pedido médico apenas se o serviço selecionado for "Exame"
+    if(!validar({ "Tipo de atendimento": servico, "Data": data, "Horário": hora })) return;
+
     let textoPedido = (servico.toLowerCase() === "exame") ? `\n${avisoPedido}\n` : "";
 
     document.getElementById('resultado').value = 
-`*Confirmação de atendimento:*
+`${saudacao(nome)}*Confirmação de atendimento:*
 
 📌 Tipo de atendimento: ${servico}
 🗓 Data: ${data}
@@ -389,6 +455,8 @@ function removerItem(id){ document.getElementById('item-'+id).remove(); }
 function gerarOrcamento(){
     let total=0, txt="*Orçamento de Exames:*\n\n";
     let itens = document.querySelectorAll('.item-orcamento');
+    if(itens.length === 0) { alert("Adicione pelo menos um exame!"); return; }
+    
     itens.forEach(item => {
         let ex=item.querySelector('.ex-i').value, cv=item.querySelector('.cv-i').value, vl=parseFloat(item.querySelector('.vl-i').value)||0;
         if(ex){ txt+=`📌 ${ex} (${cv}) - R$ ${vl.toFixed(2)}\n`; total+=vl; }
