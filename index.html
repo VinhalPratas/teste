@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Mensagens</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --primary: #123047;
+    --accent: #0f8fb3;
+    --accent-soft: #e7f7fb;
+    --success: #1f9d7a;
+    --border: #d7e5ec;
+    --bg: #f3fafb;
+    --danger: #dc2626;
+    --muted: #5f7380;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+body {
+    background-color: var(--bg);
+    background-image:
+        linear-gradient(135deg, rgba(15, 143, 179, 0.10), rgba(31, 157, 122, 0.08)),
+        radial-gradient(#c7dde5 0.5px, transparent 0.5px);
+    background-size: auto, 26px 26px;
+    min-height: 100vh;
+    display: flex; justify-content: center; align-items: center; padding: 24px;
+}
+
+.main { width: 100%; max-width: 620px; position: relative; z-index: 2; }
+.resumo-lateral { position: fixed; left: 24px; top: 70px; width: 330px; max-height: calc(100vh - 100px); overflow-y: auto; z-index: 10; }
+.card-atencao { position: fixed; right: 24px; top: 70px; width: 330px; max-height: calc(100vh - 100px); overflow-y: auto; z-index: 10; }
+
+.container {
+    background: rgba(255, 255, 255, 0.98); border-radius: 20px; padding: 32px;
+    box-shadow: 0 22px 60px rgba(18, 48, 71, 0.14); border: 1px solid rgba(190, 218, 228, 0.95);
+}
+
+.logo { width: 130px; margin: 0 auto 15px; display: block; }
+
+h2 { color: var(--primary); font-weight: 700; font-size: 1.45rem; margin-bottom: 25px; text-align: center; }
+
+label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; }
+
+select, input, textarea {
+    width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 10px;
+    border: 1px solid var(--border); background: #ffffff; font-size: 14px; color: var(--primary);
+    outline: none; box-shadow: 0 1px 0 rgba(18, 48, 71, 0.02);
+}
+
+select:focus, input:focus, textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(15, 143, 179, 0.13);
+}
+
+.section {
+    margin-top: 10px; padding: 20px; border-radius: 12px;
+    background: rgba(231, 247, 251, 0.76); border: 1px solid var(--border); animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.grid-botoes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+button {
+    width: 100%; padding: 12px; border: none; border-radius: 10px;
+    font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s;
+}
+
+.btn-generate { background: var(--success); color: white; min-height: 44px; box-shadow: 0 10px 22px rgba(31, 157, 122, 0.24); }
+.btn-generate:hover { background: #167d62; }
+
+.btn-copy { background: var(--accent); color: white; font-size: 14px; grid-column: span 2; }
+.btn-copy:hover { background: #0b7898; }
+
+.btn-clear { background: #fff; color: var(--danger); border: 1px solid var(--danger); }
+.btn-clear:hover { background: #fef2f2; }
+
+.btn-add { background: #fff; color: var(--accent); border: 1px solid #b9dfe9; margin-bottom: 10px; }
+.btn-add:hover { background: #f0fbfd; border-color: var(--accent); }
+.btn-pdf { background: var(--success); color: #ffffff; border: 1px solid var(--success); }
+.btn-pdf:hover { background: #167d62; border-color: #167d62; }
+.btn-remove { background: #fee2e2; color: #b91c1c; width: auto; padding: 5px 10px; font-size: 11px; margin-top: 5px; display: block; margin-left: auto; }
+
+#resultado { height: 180px; margin-top: 20px; background: #fbfeff; border: 2px dashed #bddbe4; color: #334155; resize: none; margin-bottom: 0; }
+
+.radio-group { display: flex; gap: 15px; margin: 5px 0 15px 0; }
+.radio-item { display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 500; color: #3d5968; }
+
+.item-orcamento { background: #ffffff; padding: 12px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 10px; box-shadow: 0 5px 14px rgba(18, 48, 71, 0.04); }
+.footer { text-align: center; font-size: 11px; margin-top: 15px; color: #7f99a7; }
+.hidden { display: none; }
+
+.resumo-lateral {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 18px;
+    border: 1px solid rgba(215, 229, 236, 0.95);
+    box-shadow: 0 14px 36px rgba(18, 48, 71, 0.09);
+}
+
+.card-atencao {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 18px;
+    border: 1px solid #f5d99b;
+    box-shadow: 0 14px 36px rgba(18, 48, 71, 0.09);
+}
+
+.card-atencao h3 {
+    color: var(--primary);
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.card-atencao p {
+    color: #496371;
+    font-size: 13px;
+    line-height: 1.45;
+    margin-bottom: 10px;
+}
+
+.card-atencao ul {
+    list-style: none;
+    margin: 0 0 12px 0;
+    padding: 0;
+}
+
+.card-atencao li {
+    background: #fffaf0;
+    border: 1px solid #f5d99b;
+    border-radius: 12px;
+    color: #4b6070;
+    font-size: 12px;
+    line-height: 1.4;
+    padding: 10px;
+    margin-bottom: 8px;
+}
+
+.card-atencao strong {
+    color: var(--primary);
+}
+
+.exemplo-atencao {
+    background: #f8fcfd;
+    border-left: 4px solid var(--success);
+    border-radius: 12px;
+    padding: 10px;
+    color: #385160;
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.resumo-lateral label {
+    color: var(--primary);
+    font-size: 12px;
+    margin-bottom: 12px;
+}
+
+#contadorAgendamentos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.contador-card {
+    background: var(--accent-soft);
+    border: 1px solid #c7e9f0;
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.contador-card strong {
+    display: block;
+    color: var(--primary);
+    font-size: 20px;
+    line-height: 1;
+}
+
+.contador-card span {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 5px;
+    text-transform: uppercase;
+}
+
+#listaAgendamentos {
+    margin-bottom: 12px;
+}
+
+.resumo-item {
+    background: #f8fcfd;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 10px;
+    color: #385160;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.resumo-item strong {
+    color: var(--primary);
+    font-size: 14px;
+}
+
+.resumo-tipo {
+    display: inline-block;
+    background: #eaf8f3;
+    color: #167d62;
+    border-radius: 999px;
+    padding: 3px 8px;
+    margin: 6px 0;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.resumo-acoes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.btn-edit {
+    background: #e7f7fb;
+    color: var(--accent);
+    border: 1px solid #b9dfe9;
+    width: 100%;
+    padding: 7px 10px;
+    font-size: 11px;
+}
+
+.resumo-acoes .btn-remove {
+    width: 100%;
+    margin: 0;
+    padding: 7px 10px;
+}
+
+.resumo-vazio {
+    background: #f8fcfd;
+    border: 1px dashed #bfd8e0;
+    border-radius: 12px;
+    padding: 14px;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.resumo-lateral > .btn-clear,
+.resumo-lateral > .btn-add {
+    margin-bottom: 8px;
+}
+
+.paciente-card {
+    background: #ffffff;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    margin-bottom: 12px;
+    box-shadow: 0 5px 14px rgba(18, 48, 71, 0.04);
+}
+
+.paciente-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.paciente-titulo {
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.campo-duplo {
+    display: grid;
+    grid-template-columns: 1fr 150px;
+    gap: 10px;
+}
+
+.atendimentos {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.atendimento-linha {
+    display: grid;
+    grid-template-columns: 1fr 120px auto;
+    gap: 8px;
+    align-items: center;
+    background: #f8fcfd;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.atendimento-linha input,
+.atendimento-linha select {
+    margin-bottom: 0;
+}
+
+.paciente-card > input,
+.paciente-card > select,
+.campo-duplo input,
+.campo-duplo select {
+    margin-bottom: 10px;
+}
+
+.paciente-card .radio-group {
+    background: #f8fcfd;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px;
+    margin: 0 0 10px 0;
+}
+
+.paciente-card .btn-add {
+    margin-bottom: 0;
+}
+
+.btn-remove-mini {
+    background: #fee2e2;
+    color: #b91c1c;
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    padding: 0;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.btn-remove-paciente {
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid #fecaca;
+    width: auto;
+    padding: 7px 10px;
+    font-size: 11px;
+}
+
+@media (max-width: 560px) {
+    .campo-duplo,
+    .atendimento-linha {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-remove-mini {
+        width: 100%;
+    }
+}
+
+@media (max-width: 1400px) {
+    body {
+        align-items: flex-start;
+        display: grid;
+        grid-template-columns: minmax(280px, 330px) minmax(560px, 620px);
+        gap: 18px;
+        justify-content: center;
+    }
+
+    .resumo-lateral,
+    .card-atencao {
+        position: static;
+        width: 100%;
+        max-height: none;
+    }
+
+    .card-atencao {
+        grid-column: 1;
+    }
+
+    .main {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+    }
+}
+
+@media (max-width: 980px) {
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .main,
+    .resumo-lateral,
+    .card-atencao {
+        width: 100%;
+        max-width: 680px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media (max-width: 560px) {
+    body { padding: 14px; }
+    .container { padding: 22px; border-radius: 16px; }
+    .grid-botoes { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="section resumo-lateral">
+    <label>Resumo de Agendamentos Salvos</label>
+    <div id="contadorAgendamentos"></div>
+    <div id="listaAgendamentos"></div>
+    <button class="btn-clear" onclick="limparAgendamentosSalvos()">Limpar Agendamentos Salvos</button>
+    <button class="btn-add" onclick="baixarExcelAgendamentos()">Baixar Excel</button>
+    <button class="btn-add btn-pdf" onclick="baixarPDFAgendamentos()">Baixar PDF</button>
+    <button class="btn-add" onclick="exportarBackupJSON()">Exportar Backup</button>
+    <button class="btn-add" onclick="document.getElementById('arquivoBackup').click()">Importar Backup</button>
+    <input id="arquivoBackup" type="file" accept="application/json,.json" class="hidden" onchange="importarBackupJSON(event)">
+</div>
+
+<div class="card-atencao">
+    <h3>Atenção no Cadastro</h3>
+    <p>Use o sistema sempre por atendimento. O resumo conta pacientes e atendimentos salvos automaticamente.</p>
+    <ul>
+        <li><strong>Pacientes:</strong> cada vez que você salva um agendamento, conta 1 paciente no resumo.</li>
+        <li><strong>Exames:</strong> cada exame preenchido conta individualmente, mesmo quando está no mesmo paciente.</li>
+        <li><strong>Consultas e retornos:</strong> contam separado dos exames para facilitar o fechamento do dia.</li>
+        <li><strong>Mesmo horário:</strong> se dois exames tiverem o mesmo horário, cadastre os dois exames e repita o mesmo horário. A mensagem junta tudo em uma linha.</li>
+        <li><strong>Horários diferentes:</strong> se os exames forem em horários diferentes, preencha cada exame com seu próprio horário. A mensagem separa automaticamente.</li>
+    </ul>
+    <div class="exemplo-atencao">
+        <strong>Exemplo:</strong><br>
+        Ultrassom mamas - 17h<br>
+        Ultrassom tv - 17h<br><br>
+        Sai na mensagem como:<br>
+        Exame: Ultrassom mamas, Ultrassom tv<br>
+        Horário: 17h
+    </div>
+</div>
+
+<div class="main">
+    <div class="container">
+        <img src="Logo tecnológico SantoryTec com design moderno.png" class="logo">
+        <h2>Sistema de Mensagens</h2>
+
+        <label>Selecione o Serviço</label>
+        <select id="tipo" onchange="trocar()">
+            <option value="">Selecione...</option>
+            <option value="exame">Agendamento Exame</option>
+            <option value="exameEncaixe">Exame Encaixe</option>
+            <option value="consulta">Agendamento Consulta/Retorno</option>
+            <option value="orcamento">Orçamento</option>
+            <option value="confirmacao">Confirmação</option>
+        </select>
+
+        <!-- EXAME -->
+        <div id="exame" class="hidden section">
+            <div id="pacientesExame"></div>
+            <div class="grid-botoes">
+                <button class="btn-clear" onclick="limparCampos('exame')">Limpar</button>
+                <button class="btn-generate" onclick="gerarECopiar('gerarExame')">Gerar, Salvar e Copiar</button>
+            </div>
+        </div>
+
+        <!-- EXAME ENCAIXE -->
+        <div id="exameEncaixe" class="hidden section">
+            <div id="pacientesExameEncaixe"></div>
+            <div class="grid-botoes">
+                <button class="btn-clear" onclick="limparCampos('exameEncaixe')">Limpar</button>
+                <button class="btn-generate" onclick="gerarECopiar('gerarExameEncaixe')">Gerar, Salvar e Copiar</button>
+            </div>
+        </div>
+
+        <!-- CONSULTA -->
+        <div id="consulta" class="hidden section">
+            <label>Tipo de Atendimento</label>
+            <select id="tipoConsultaRetorno">
+                <option value="Consulta">Consulta</option>
+                <option value="Retorno">Retorno</option>
+            </select>
+            <div class="campo-duplo">
+                <input id="pacienteConsultaUnico" placeholder="Nome do Paciente (Opcional)">
+                <input id="dataConsultaUnico" placeholder="Data">
+            </div>
+            <div class="radio-group">
+                <label class="radio-item"><input type="radio" name="tipoConsultaUnico" value="Horário marcado"> Horário marcado</label>
+                <label class="radio-item"><input type="radio" name="tipoConsultaUnico" value="Ordem de chegada"> Ordem de chegada</label>
+            </div>
+            <select id="medicoConsultaUnico"></select>
+            <input id="horaConsultaUnico" placeholder="Horário">
+            <div class="grid-botoes">
+                <button class="btn-clear" onclick="limparCampos('consulta')">Limpar</button>
+                <button class="btn-generate" onclick="gerarECopiar('gerarConsulta')">Gerar, Salvar e Copiar</button>
+            </div>
+        </div>
+
+        <!-- RETORNO -->
+        <div id="retorno" class="hidden section">
+            <input id="pacienteR" placeholder="Nome do Paciente (Opcional)">
+            <input id="dataR" placeholder="Data">
+            <input id="horaR" placeholder="Horário">
+            <div class="radio-group">
+                <label class="radio-item"><input type="radio" name="tipoR" value="Horário marcado"> Horário marcado</label>
+                <label class="radio-item"><input type="radio" name="tipoR" value="Ordem de chegada"> Ordem de chegada</label>
+            </div>
+            <select id="medicoR">
+                <option value="">Selecione o médico</option>
+                <option value="ANTONIO CARLOS JORGE">ANTONIO CARLOS JORGE</option>
+                <option value="ARTHUR LANNA APPELT">ARTHUR LANNA APPELT</option>
+                <option value="CARLOS GALVAO VICTOR">CARLOS GALVAO VICTOR</option>
+                <option value="DIEB A. AFIUNE">DIEB A. AFIUNE</option>
+                <option value="DURVAL ARTHUR C. NOGUEIRA FILHO">DURVAL ARTHUR C. NOGUEIRA FILHO</option>
+                <option value="FABIO ALESSANDRO GALVÃO PASSOS">FABIO ALESSANDRO GALVÃO PASSOS</option>
+                <option value="FABRICIO GUIMARAES PRUDENTE">FABRICIO GUIMARAES PRUDENTE</option>
+                <option value="FERNANDA LOURENÇO RODRIGUES">FERNANDA LOURENÇO RODRIGUES</option>
+                <option value="FLAVIANO HENRIQUE PELLOSO BORGHESAN">FLAVIANO HENRIQUE PELLOSO BORGHESAN</option>
+                <option value="GLEBER FERNANDES OLIVEIRA">GLEBER FERNANDES OLIVEIRA</option>
+                <option value="GUILHERME ABRAHÃO AFIUNE">GUILHERME ABRAHÃO AFIUNE</option>
+                <option value="GUILHERME CUNHA DOS SANTOS TELES">GUILHERME CUNHA DOS SANTOS TELES</option>
+                <option value="GUSTAVO DE SOUSA CAMPOS JORGE">GUSTAVO DE SOUSA CAMPOS JORGE</option>
+                <option value="GUSTAVO PAVLIK HADDAD">GUSTAVO PAVLIK HADDAD</option>
+                <option value="HELDER ANDRADA">HELDER ANDRADA</option>
+                <option value="JAIME FLAVIO CAETANO">JAIME FLAVIO CAETANO</option>
+                <option value="JEAN LOUIS SCHOEPFER JUNIOR">JEAN LOUIS SCHOEPFER JUNIOR</option>
+                <option value="JORGE MIGUEL GONZALES DUTRA">JORGE MIGUEL GONZALES DUTRA</option>
+                <option value="JOSE VINICIUS TRONCONI">JOSE VINICIUS TRONCONI</option>
+                <option value="LEONARDO DRIESSEN RODRIGUES CARVALHO">LEONARDO DRIESSEN RODRIGUES CARVALHO</option>
+                <option value="LEONARDO GONÇALVES MONTALVÃO">LEONARDO GONÇALVES MONTALVÃO</option>
+                <option value="LUCAS ALMEIDA GUERRA">LUCAS ALMEIDA GUERRA</option>
+                <option value="LUCIANO LUCINDO DA SILVA">LUCIANO LUCINDO DA SILVA</option>
+                <option value="LUDMILA PAVLIK HADDAD">LUDMILA PAVLIK HADDAD</option>
+                <option value="MARCIO MATIAS DE OLIVEIRA">MARCIO MATIAS DE OLIVEIRA</option>
+                <option value="MARCO AURELIO G.A.BARBOSA">MARCO AURELIO G.A.BARBOSA</option>
+                <option value="MARCOS ALESSANDRO LEÃO">MARCOS ALESSANDRO LEÃO</option>
+                <option value="MAURO GAMERO ALVES DA COSTA">MAURO GAMERO ALVES DA COSTA</option>
+                <option value="NAIN NOGUEIRA MARQUES">NAIN NOGUEIRA MARQUES</option>
+                <option value="PAULO CESAR DA SILVA FRANCISCO">PAULO CESAR DA SILVA FRANCISCO</option>
+                <option value="RAZEM FARINHA ABRAHÃO">RAZEM FARINHA ABRAHÃO</option>
+                <option value="RICARDO CAMPOS SABAG">RICARDO CAMPOS SABAG</option>
+                <option value="SAAD GEORGE OLIVEIRA EL HAOULI">SAAD GEORGE OLIVEIRA EL HAOULI </option>
+                <option value="THIAGO LACERDA ATAIDES">THIAGO LACERDA ATAIDES</option>
+                <option value="THYAGO DILENO RODRIGUES">THYAGO DILENO RODRIGUES</option>
+                <option value="WILTON JOSE JURY">WILTON JOSE JURY</option>
+            </select>
+            <div class="grid-botoes">
+                <button class="btn-clear" onclick="limparCampos('retorno')">Limpar</button>
+                <button class="btn-generate" onclick="gerarECopiar('gerarRetorno')">Gerar, Salvar e Copiar</button>
+            </div>
+        </div>
+
+        <!-- CONFIRMAÇÃO -->
+        <div id="confirmacao" class="hidden section">
+            <input id="pacienteConf" placeholder="Nome do Paciente (Opcional)">
+            <select id="servicoConfirmacao">
+                <option value="">Selecione o tipo de atendimento</option>
+                <option value="Exame">Exame</option>
+                <option value="Consulta">Consulta</option>
+                <option value="Retorno">Retorno</option>
+            </select>
+            <input id="dataConfirmacao" placeholder="Data">
+            <input id="horaConfirmacao" placeholder="Horário">
+            <div class="radio-group">
+                <label class="radio-item"><input type="radio" name="tipoConfirmacao" value="Horário marcado"> Horário marcado</label>
+                <label class="radio-item"><input type="radio" name="tipoConfirmacao" value="Ordem de chegada"> Ordem de chegada</label>
+            </div>
+            <div class="grid-botoes">
+                <button class="btn-clear" onclick="limparCampos('confirmacao')">Limpar</button>
+                <button class="btn-generate" onclick="gerarECopiar('gerarConfirmacao')">Gerar e Copiar</button>
+            </div>
+        </div>
+
+        <!-- ORÇAMENTO -->
+        <div id="orcamento" class="hidden section">
+            <datalist id="listaExames">
+                <option value="Ecocardiograma transtorácico">
+                <option value="Eletrocardiograma-ECG">
+                <option value="Holter 24h">
+                <option value="Mapa 24h">
+                <option value="Teste Ergométrico">
+            </datalist>
+            <div id="itens"></div>
+            <button class="btn-add" onclick="addItem()">+ Adicionar Exame</button>
+            <div class="grid-botoes">
+                <button class="btn-clear" onclick="limparCampos('orcamento')">Limpar Tudo</button>
+                <button class="btn-generate" onclick="gerarECopiar('gerarOrcamento')">Gerar e Copiar</button>
+            </div>
+        </div>
+
+        <textarea id="resultado" readonly placeholder="O texto gerado aparecerá aqui..."></textarea>
+
+        <div class="footer">Kamilly Vitoria | 2026</div>
+    </div>
+</div>
+
+<script>
+const enderecoPadrao = "📍 *Endereço:* \nhttps://maps.app.goo.gl/Sc8cn8tPJgX6snUj6";
+const avisoPedido = "⚠️ *Trazer o pedido médico ORIGINAL, ASSINADO e CARIMBADO pelo médico(a).*";
+const STORAGE_KEY = "santorytec_agendamentos";
+let agendamentoEditandoId = null;
+
+const medicosOptions = `
+    <option value="">Selecione o Médico</option>
+    <option value="ANTONIO CARLOS JORGE">ANTONIO CARLOS JORGE</option>
+    <option value="ARTHUR LANNA APPELT">ARTHUR LANNA APPELT</option>
+    <option value="CARLOS GALVAO VICTOR">CARLOS GALVAO VICTOR</option>
+    <option value="DIEB A. AFIUNE">DIEB A. AFIUNE</option>
+    <option value="DURVAL ARTHUR C. NOGUEIRA FILHO">DURVAL ARTHUR C. NOGUEIRA FILHO</option>
+    <option value="FABIO ALESSANDRO GALVÃO PASSOS">FABIO ALESSANDRO GALVÃO PASSOS</option>
+    <option value="FABRICIO GUIMARAES PRUDENTE">FABRICIO GUIMARAES PRUDENTE</option>
+    <option value="FERNANDA LOURENÇO RODRIGUES">FERNANDA LOURENÇO RODRIGUES</option>
+    <option value="FLAVIANO HENRIQUE PELLOSO BORGHESAN">FLAVIANO HENRIQUE PELLOSO BORGHESAN</option>
+    <option value="GLEBER FERNANDES OLIVEIRA">GLEBER FERNANDES OLIVEIRA</option>
+    <option value="GUILHERME ABRAHÃO AFIUNE">GUILHERME ABRAHÃO AFIUNE</option>
+    <option value="GUILHERME CUNHA DOS SANTOS TELES">GUILHERME CUNHA DOS SANTOS TELES</option>
+    <option value="GUSTAVO DE SOUSA CAMPOS JORGE">GUSTAVO DE SOUSA CAMPOS JORGE</option>
+    <option value="GUSTAVO PAVLIK HADDAD">GUSTAVO PAVLIK HADDAD</option>
+    <option value="HELDER ANDRADA">HELDER ANDRADA</option>
+    <option value="JAIME FLAVIO CAETANO">JAIME FLAVIO CAETANO</option>
+    <option value="JEAN LOUIS SCHOEPFER JUNIOR">JEAN LOUIS SCHOEPFER JUNIOR</option>
+    <option value="JORGE MIGUEL GONZALES DUTRA">JORGE MIGUEL GONZALES DUTRA</option>
+    <option value="JOSE VINICIUS TRONCONI">JOSE VINICIUS TRONCONI</option>
+    <option value="LEONARDO DRIESSEN RODRIGUES CARVALHO">LEONARDO DRIESSEN RODRIGUES CARVALHO</option>
+    <option value="LEONARDO GONÇALVES MONTALVÃO">LEONARDO GONÇALVES MONTALVÃO</option>
+    <option value="LUCAS ALMEIDA GUERRA">LUCAS ALMEIDA GUERRA</option>
+    <option value="LUCIANO LUCINDO DA SILVA">LUCIANO LUCINDO DA SILVA</option>
+    <option value="LUDMILA PAVLIK HADDAD">LUDMILA PAVLIK HADDAD</option>
+    <option value="MARCIO MATIAS DE OLIVEIRA">MARCIO MATIAS DE OLIVEIRA</option>
+    <option value="MARCO AURELIO G.A.BARBOSA">MARCO AURELIO G.A.BARBOSA</option>
+    <option value="MARCOS ALESSANDRO LEÃO">MARCOS ALESSANDRO LEÃO</option>
+    <option value="MAURO GAMERO ALVES DA COSTA">MAURO GAMERO ALVES DA COSTA</option>
+    <option value="NAIN NOGUEIRA MARQUES">NAIN NOGUEIRA MARQUES</option>
+    <option value="PAULO CESAR DA SILVA FRANCISCO">PAULO CESAR DA SILVA FRANCISCO</option>
+    <option value="RAZEM FARINHA ABRAHÃO">RAZEM FARINHA ABRAHÃO</option>
+    <option value="RICARDO CAMPOS SABAG">RICARDO CAMPOS SABAG</option>
+    <option value="SAAD GEORGE OLIVEIRA EL HAOULI">SAAD GEORGE OLIVEIRA EL HAOULI </option>
+    <option value="THIAGO LACERDA ATAIDES">THIAGO LACERDA ATAIDES</option>
+    <option value="THYAGO DILENO RODRIGUES">THYAGO DILENO RODRIGUES</option>
+    <option value="WILTON JOSE JURY">WILTON JOSE JURY</option>
+`;
+
+function trocar(manterEdicao = false){
+    if(!manterEdicao) agendamentoEditandoId = null;
+    const secoes = ['exame', 'exameEncaixe', 'consulta', 'retorno', 'orcamento', 'confirmacao'];
+    secoes.forEach(s => document.getElementById(s).classList.add('hidden'));
+    document.getElementById('resultado').value = "";
+    let t = document.getElementById('tipo').value;
+    if(t) document.getElementById(t).classList.remove('hidden');
+}
+
+function validar(dados) {
+    for (let campo in dados) {
+        if (!dados[campo]) {
+            alert(`Por favor, preencha o campo: ${campo}`);
+            return false;
+        }
+    }
+    return true;
+}
+
+function saudacao(nome) {
+    return nome ? `Olá, *${nome.trim()}*!\n\n` : "";
+}
+
+function obterAgendamentos() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+}
+
+function salvarAgendamentos(agendamentos) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(agendamentos));
+    atualizarResumoAgendamentos();
+}
+
+function registrarAgendamento(registro) {
+    const agendamentos = obterAgendamentos();
+    const agendamentosSemAtual = agendamentoEditandoId
+        ? agendamentos.filter(item => item.id !== agendamentoEditandoId)
+        : agendamentos;
+
+    if(agendamentosSemAtual.some(item => chaveAgendamento(item) === chaveAgendamento(registro))) {
+        return false;
+    }
+
+    agendamentosSemAtual.push({
+        id: agendamentoEditandoId || Date.now(),
+        criadoEm: new Date().toLocaleString("pt-BR"),
+        ...registro
+    });
+    salvarAgendamentos(agendamentosSemAtual);
+    agendamentoEditandoId = null;
+    return true;
+}
+
+function chaveAgendamento(registro) {
+    const atendimentos = [...(registro.atendimentos || [])]
+        .map(item => ({
+            nome: normalizarTexto(item.nome),
+            hora: normalizarTexto(item.hora)
+        }))
+        .sort((a, b) => `${a.nome}-${a.hora}`.localeCompare(`${b.nome}-${b.hora}`));
+
+    return JSON.stringify({
+        paciente: normalizarTexto(registro.paciente || "Paciente não informado"),
+        tipoServico: normalizarTexto(registro.tipoServico),
+        data: normalizarTexto(registro.data),
+        modalidade: normalizarTexto(registro.modalidade),
+        medico: normalizarTexto(registro.medico),
+        atendimentos
+    });
+}
+
+function normalizarTexto(valor) {
+    return String(valor || "").trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+function atualizarResumoAgendamentos() {
+    const agendamentos = obterAgendamentos();
+    const totalPacientes = agendamentos.length;
+    const totalExames = agendamentos
+        .filter(item => item.tipoServico === "Exame" || item.tipoServico === "Exame Encaixe")
+        .reduce((total, item) => total + item.atendimentos.length, 0);
+    const totalConsultas = agendamentos
+        .filter(item => item.tipoServico === "Consulta")
+        .reduce((total, item) => total + item.atendimentos.length, 0);
+    const totalRetornos = agendamentos
+        .filter(item => item.tipoServico === "Retorno")
+        .reduce((total, item) => total + item.atendimentos.length, 0);
+
+    document.getElementById("contadorAgendamentos").innerHTML = `
+        <div class="contador-card"><strong>${totalPacientes}</strong><span>Pacientes</span></div>
+        <div class="contador-card"><strong>${totalExames}</strong><span>Exames</span></div>
+        <div class="contador-card"><strong>${totalConsultas}</strong><span>Consultas</span></div>
+        <div class="contador-card"><strong>${totalRetornos}</strong><span>Retornos</span></div>
+    `;
+
+    const lista = document.getElementById("listaAgendamentos");
+    lista.innerHTML = "";
+
+    if(agendamentos.length === 0) {
+        lista.innerHTML = `<div class="resumo-vazio">Nenhum agendamento salvo.</div>`;
+        return;
+    }
+
+    agendamentos.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "resumo-item";
+        div.innerHTML = `
+            <strong>${item.paciente || "Paciente não informado"}</strong><br>
+            <span class="resumo-tipo">${item.tipoServico}</span><br>
+            🗓 ${item.data}${item.modalidade ? ` - ${item.modalidade}` : ""}<br>
+            ${item.medico ? `👨‍⚕️ ${item.medico}<br>` : ""}
+            ${formatarResumoAtendimentos(item)}
+            <div class="resumo-acoes">
+                <button class="btn-edit" onclick="editarAgendamento(${item.id})">Editar</button>
+                <button class="btn-remove" onclick="removerAgendamento(${item.id})">✖ Remover</button>
+            </div>
+        `;
+        lista.appendChild(div);
+    });
+}
+
+function formatarResumoAtendimentos(item) {
+    if(item.tipoServico === "Consulta" || item.tipoServico === "Retorno") {
+        return item.atendimentos.map(atendimento => `⏰ Horário: ${atendimento.hora}`).join("<br>");
+    }
+
+    return item.atendimentos.map(atendimento => `📌 ${atendimento.nome} às ${atendimento.hora}`).join("<br>");
+}
+
+function removerAgendamento(id) {
+    const agendamentos = obterAgendamentos().filter(item => item.id !== id);
+    salvarAgendamentos(agendamentos);
+    if(agendamentoEditandoId === id) agendamentoEditandoId = null;
+}
+
+function editarAgendamento(id) {
+    const registro = obterAgendamentos().find(item => item.id === id);
+    if(!registro) return;
+
+    agendamentoEditandoId = id;
+
+    if(registro.tipoServico === "Exame") {
+        document.getElementById("tipo").value = "exame";
+        trocar(true);
+        limparCampos("exame", true);
+        preencherFormularioExame("pacientesExame", registro);
+    } else if(registro.tipoServico === "Exame Encaixe") {
+        document.getElementById("tipo").value = "exameEncaixe";
+        trocar(true);
+        limparCampos("exameEncaixe", true);
+        preencherFormularioExame("pacientesExameEncaixe", registro);
+    } else if(registro.tipoServico === "Consulta" || registro.tipoServico === "Retorno") {
+        document.getElementById("tipo").value = "consulta";
+        trocar(true);
+        limparCampos("consulta", true);
+        preencherFormularioConsulta(registro);
+    }
+
+    document.getElementById("resultado").value = "";
+}
+
+function preencherFormularioExame(containerId, registro) {
+    const card = document.querySelector(`#${containerId} .paciente-card`);
+    card.querySelector(".paciente-nome").value = registro.paciente || "";
+    card.querySelector(".paciente-data").value = registro.data || "";
+    marcarRadio(card, registro.modalidade);
+
+    const lista = card.querySelector(".atendimentos");
+    lista.innerHTML = "";
+
+    registro.atendimentos.forEach(atendimento => {
+        adicionarAtendimento(card.querySelector(".btn-add"), "exame");
+        const linha = lista.lastElementChild;
+        linha.querySelector(".atendimento-nome").value = atendimento.nome || "";
+        linha.querySelector(".atendimento-hora").value = atendimento.hora || "";
+    });
+}
+
+function preencherFormularioConsulta(registro) {
+    document.getElementById("tipoConsultaRetorno").value = registro.tipoServico;
+    document.getElementById("pacienteConsultaUnico").value = registro.paciente || "";
+    document.getElementById("dataConsultaUnico").value = registro.data || "";
+    document.getElementById("medicoConsultaUnico").value = registro.medico || "";
+    document.getElementById("horaConsultaUnico").value = registro.atendimentos?.[0]?.hora || "";
+    marcarRadio(document.getElementById("consulta"), registro.modalidade);
+}
+
+function marcarRadio(container, valor) {
+    if(!valor) return;
+    const radio = [...container.querySelectorAll('input[type="radio"]')]
+        .find(item => item.value === valor);
+    if(radio) radio.checked = true;
+}
+
+function limparAgendamentosSalvos() {
+    if(confirm("Deseja apagar todos os agendamentos salvos?")) {
+        localStorage.removeItem(STORAGE_KEY);
+        atualizarResumoAgendamentos();
+    }
+}
+
+function limparCampos(id, manterEdicao = false) {
+    if(!manterEdicao) agendamentoEditandoId = null;
+    const section = document.getElementById(id);
+    const inputs = section.querySelectorAll('input, select');
+    inputs.forEach(i => {
+        if (i.type === 'radio') i.checked = false;
+        else i.value = "";
+    });
+    if(id === 'orcamento') document.getElementById('itens').innerHTML = "";
+    if(id === 'exame') {
+        document.getElementById('pacientesExame').innerHTML = "";
+        adicionarPacienteExame();
+    }
+    if(id === 'exameEncaixe') {
+        document.getElementById('pacientesExameEncaixe').innerHTML = "";
+        adicionarPacienteExameEncaixe();
+    }
+    if(id === 'consulta') {
+        document.getElementById('tipoConsultaRetorno').value = "Consulta";
+    }
+    document.getElementById('resultado').value = "";
+}
+
+function adicionarPacienteExame() {
+    criarBlocoPaciente("pacientesExame", "exame");
+}
+
+function adicionarPacienteExameEncaixe() {
+    criarBlocoPaciente("pacientesExameEncaixe", "exameEncaixe");
+}
+
+function criarBlocoPaciente(containerId, tipo) {
+    const container = document.getElementById(containerId);
+    const pacienteIndex = container.querySelectorAll(".paciente-card").length + 1;
+    const pacienteId = `${tipo}-${Date.now()}-${pacienteIndex}`;
+    const div = document.createElement("div");
+    div.className = "paciente-card";
+    div.dataset.paciente = pacienteId;
+
+    if(tipo === "consulta") {
+        div.innerHTML = `
+            <div class="paciente-topo">
+                <div class="paciente-titulo">Dados do Paciente</div>
+            </div>
+            <div class="campo-duplo">
+                <input class="paciente-nome" placeholder="Nome do Paciente (Opcional)">
+                <input class="paciente-data" placeholder="Data">
+            </div>
+            <div class="radio-group">
+                <label class="radio-item"><input type="radio" name="tipo-${pacienteId}" value="Horário marcado"> Horário marcado</label>
+                <label class="radio-item"><input type="radio" name="tipo-${pacienteId}" value="Ordem de chegada"> Ordem de chegada</label>
+            </div>
+            <select class="consulta-medico">${medicosOptions}</select>
+            <div class="atendimentos"></div>
+            <button class="btn-add" onclick="adicionarAtendimento(this, 'consulta')">+ Adicionar Consulta/Retorno</button>
+        `;
+    } else {
+        const grupoModalidade = tipo === "exameEncaixe" ? "" : `
+            <div class="radio-group">
+                <label class="radio-item"><input type="radio" name="tipo-${pacienteId}" value="Horário marcado"> Horário marcado</label>
+                <label class="radio-item"><input type="radio" name="tipo-${pacienteId}" value="Ordem de chegada"> Ordem de chegada</label>
+            </div>
+        `;
+
+        div.innerHTML = `
+            <div class="paciente-topo">
+                <div class="paciente-titulo">Dados do Paciente</div>
+            </div>
+            <div class="campo-duplo">
+                <input class="paciente-nome" placeholder="Nome do Paciente (Opcional)">
+                <input class="paciente-data" placeholder="Data">
+            </div>
+            ${grupoModalidade}
+            <div class="atendimentos"></div>
+            <button class="btn-add" onclick="adicionarAtendimento(this, 'exame')">+ Adicionar Exame</button>
+        `;
+    }
+
+    container.appendChild(div);
+    adicionarAtendimento(div.querySelector(".btn-add"), tipo === "consulta" ? "consulta" : "exame");
+}
+
+function adicionarAtendimento(botao, tipo) {
+    const blocoPaciente = botao.closest(".paciente-card");
+    const lista = blocoPaciente.querySelector(".atendimentos");
+    const div = document.createElement("div");
+    div.className = "atendimento-linha";
+    if(tipo === "consulta") {
+        div.innerHTML = `
+            <input class="atendimento-hora" placeholder="Horário">
+            <button class="btn-remove-mini" onclick="removerAtendimento(this)">×</button>
+        `;
+    } else {
+        div.innerHTML = `
+            <input class="atendimento-nome" placeholder="Nome do Exame">
+            <input class="atendimento-hora" placeholder="Horário">
+            <button class="btn-remove-mini" onclick="removerAtendimento(this)">×</button>
+        `;
+    }
+    lista.appendChild(div);
+}
+
+function removerPaciente(botao) {
+    botao.closest(".paciente-card").remove();
+}
+
+function removerAtendimento(botao) {
+    botao.closest(".atendimento-linha").remove();
+}
+
+function coletarPacientes(containerId, tipoServico) {
+    const blocos = document.querySelectorAll(`#${containerId} > .paciente-card`);
+    const registros = [];
+
+    for (const bloco of blocos) {
+        const paciente = bloco.querySelector(".paciente-nome").value;
+        const data = bloco.querySelector(".paciente-data").value;
+        const modalidade = bloco.querySelector('input[type="radio"]:checked')?.value || "";
+        const medico = bloco.querySelector(".consulta-medico")?.value || "";
+        const linhasAtendimento = [...bloco.querySelectorAll(".atendimentos > .atendimento-linha")];
+        const atendimentos = [];
+
+        for (const item of linhasAtendimento) {
+            const nome = item.querySelector(".atendimento-nome")?.value || tipoServico;
+            const hora = item.querySelector(".atendimento-hora").value;
+
+            if(!nome || !hora) {
+                alert("Preencha o nome e o horário de todos os exames/consultas adicionados.");
+                return null;
+            }
+
+            atendimentos.push({ nome, hora });
+        }
+
+        if(!validar({ "Data": data })) return null;
+        if((tipoServico === "Consulta" || tipoServico === "Retorno") && !validar({ "Médico": medico })) return null;
+        if(atendimentos.length === 0) {
+            alert("Adicione pelo menos um exame/consulta com nome e horário.");
+            return null;
+        }
+
+        registros.push({ paciente, data, modalidade, medico, atendimentos, tipoServico });
+    }
+
+    if(registros.length === 0) {
+        alert("Adicione pelo menos um paciente.");
+        return null;
+    }
+
+    return registros;
+}
+
+function formatarAtendimentos(atendimentos, rotulo) {
+    return atendimentos.map(item => `${rotulo}: ${item.nome}\n⏰ Horário: ${item.hora}`).join("\n\n");
+}
+
+function formatarExamesPorHorario(atendimentos, modalidade = "") {
+    const grupos = atendimentos.reduce((acc, item) => {
+        const hora = item.hora.trim();
+        if(!acc[hora]) acc[hora] = [];
+        acc[hora].push(item.nome.trim());
+        return acc;
+    }, {});
+
+    return Object.entries(grupos).map(([hora, exames]) =>
+        `📌 Exame: ${exames.join(", ")}\n⏰ Horário: ${hora}${modalidade ? ` - ${modalidade}` : ""}`
+    ).join("\n\n");
+}
+
+function formatarHorarios(atendimentos, modalidade = "") {
+    return atendimentos.map(item => `⏰ Horário: ${item.hora}${modalidade ? ` - ${modalidade}` : ""}`).join("\n");
+}
+
+function gerarExame(){
+    const registros = coletarPacientes("pacientesExame", "Exame");
+    if(!registros) return;
+
+    const mensagens = registros.map(registro => {
+        registrarAgendamento(registro);
+        return `${saudacao(registro.paciente)}*Seu exame foi agendado:*
+
+🗓 Data: ${registro.data}
+${formatarExamesPorHorario(registro.atendimentos, registro.modalidade)}
+
+${enderecoPadrao}
+
+${avisoPedido}
+
+⏳ Podem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.
+
+Caso tenha dúvidas, estamos à disposição!`;
+    });
+
+    document.getElementById('resultado').value = mensagens.join("\n\n------------------------------\n\n");
+}
+
+function gerarExameEncaixe(){
+    const registros = coletarPacientes("pacientesExameEncaixe", "Exame Encaixe");
+    if(!registros) return;
+
+    const mensagens = registros.map(registro => {
+        registrarAgendamento(registro);
+        return `${saudacao(registro.paciente)}*Seu exame foi agendado (Encaixe):*
+
+🗓 Data: ${registro.data}
+${formatarExamesPorHorario(registro.atendimentos, "Horário estimado")}
+
+${enderecoPadrao}
+
+${avisoPedido}
+
+⏳ Seu exame será realizado por encaixe, ou seja, você será atendido(a) entre um agendamento e outro, conforme o andamento dos exames do dia.
+
+Caso tenha dúvidas, estamos à disposição!`;
+    });
+
+    document.getElementById('resultado').value = mensagens.join("\n\n------------------------------\n\n");
+}
+
+function gerarConsulta(){
+    const tipoSelecionado = document.getElementById("tipoConsultaRetorno").value;
+    const nome = document.getElementById("pacienteConsultaUnico").value;
+    const data = document.getElementById("dataConsultaUnico").value;
+    const modalidade = document.querySelector('input[name="tipoConsultaUnico"]:checked')?.value || "";
+    const medico = document.getElementById("medicoConsultaUnico").value;
+    const hora = document.getElementById("horaConsultaUnico").value;
+
+    if(!validar({ "Data": data, "Médico": medico, "Horário": hora })) return;
+
+    const registro = {
+        paciente: nome,
+        data,
+        modalidade,
+        medico,
+        tipoServico: tipoSelecionado,
+        atendimentos: [{ nome: tipoSelecionado, hora }]
+    };
+
+    registrarAgendamento(registro);
+
+    const ehRetorno = tipoSelecionado === "Retorno";
+    const tituloMensagem = ehRetorno ? "Seu retorno foi agendado" : "Sua consulta foi agendada";
+
+    document.getElementById('resultado').value = `${saudacao(nome)}*${tituloMensagem}:*
+
+🗓 Data: ${data}
+⏰ Horário: ${hora}${modalidade ? ` - ${modalidade}` : ""}
+👨‍⚕️ Médico: ${medico}
+${ehRetorno ? "\n📌 Este atendimento é referente a retorno médico.\n" : ""}
+
+${enderecoPadrao}
+
+⏳ Podem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.
+
+Caso tenha dúvidas, estamos à disposição!`;
+}
+
+function gerarRetorno(){
+    let nome = document.getElementById('pacienteR').value;
+    let data = document.getElementById('dataR').value, hora = document.getElementById('horaR').value,
+        medico = document.getElementById('medicoR').value,
+        tipo = document.querySelector('input[name="tipoR"]:checked')?.value || "";
+
+    if(!validar({ "Data": data, "Horário": hora, "Médico": medico })) return;
+
+    registrarAgendamento({
+        paciente: nome,
+        data,
+        modalidade: tipo,
+        medico,
+        tipoServico: "Retorno",
+        atendimentos: [{ nome: "Retorno médico", hora }]
+    });
+
+    document.getElementById('resultado').value =
+`${saudacao(nome)}*Seu retorno foi agendado:*
+
+🗓 Data: ${data}
+⏰ Horário: ${hora}${tipo ? ` - ${tipo}` : ""}
+👨‍⚕️ Médico: ${medico}
+
+📌 Este atendimento é referente a retorno médico.
+
+${enderecoPadrao}
+
+⏳ Podem ocorrer atrasos devido a intercorrências, mas faremos o possível para atendê-lo(a) no menor tempo possível.
+
+Caso tenha dúvidas, estamos à disposição!`;
+}
+
+function gerarConfirmacao(){
+    let nome = document.getElementById('pacienteConf').value;
+    let servico = document.getElementById('servicoConfirmacao').value,
+        data = document.getElementById('dataConfirmacao').value,
+        hora = document.getElementById('horaConfirmacao').value,
+        tipo = document.querySelector('input[name="tipoConfirmacao"]:checked')?.value || "";
+
+    if(!validar({ "Tipo de atendimento": servico, "Data": data, "Horário": hora })) return;
+
+    let textoPedido = (servico.toLowerCase() === "exame") ? `\n${avisoPedido}\n` : "";
+
+    document.getElementById('resultado').value =
+`${saudacao(nome)}*Confirmação de atendimento:*
+
+📌 Tipo de atendimento: ${servico}
+🗓 Data: ${data}
+⏰ Horário: ${hora}${tipo ? ` - ${tipo}` : ""}
+
+${enderecoPadrao}
+${textoPedido}
+⚠️ Em caso de imprevisto ou necessidade de alteração, pedimos que entre em contato conosco com antecedência.
+
+Caso tenha dúvidas, estamos à disposição!`;
+}
+
+let contador=0;
+function addItem(){
+    contador++;
+    let div=document.createElement('div');
+    div.className = "item-orcamento"; div.id = "item-"+contador;
+    div.innerHTML=`<input class="ex-i" list="listaExames" placeholder="Exame"><div style="display:flex; gap:10px"><input class="cv-i" placeholder="Convênio" style="flex:2"><input class="vl-i" type="number" placeholder="R$" style="flex:1"></div><button class="btn-remove" onclick="removerItem(${contador})">✖ Remover</button>`;
+    document.getElementById('itens').appendChild(div);
+}
+
+function removerItem(id){ document.getElementById('item-'+id).remove(); }
+
+function gerarOrcamento(){
+    let total=0, txt="*Orçamento de Exames:*\n\n";
+    let itens = document.querySelectorAll('#itens .item-orcamento');
+    if(itens.length === 0) { alert("Adicione pelo menos um exame!"); return; }
+
+    itens.forEach(item => {
+        let ex=item.querySelector('.ex-i')?.value, cv=item.querySelector('.cv-i')?.value, vl=parseFloat(item.querySelector('.vl-i')?.value)||0;
+        if(ex){ txt+=`📌 ${ex} (${cv}) - R$ ${vl.toFixed(2)}\n`; total+=vl; }
+    });
+    txt+=`\n💰 Total: R$ ${total.toFixed(2)}\n\nPagamento em dinheiro, PIX e cartões de CRÉDITO e DÉBITO\nOferecemos parcelamento em até 2 vezes sem juros ou em até 10 vezes, com acréscimo.`;
+    document.getElementById('resultado').value=txt;
+}
+
+function gerarECopiar(nomeGerador) {
+    document.getElementById('resultado').value = "";
+    window[nomeGerador]();
+    if(document.getElementById('resultado').value) copiar(false);
+}
+
+function montarLinhasAgendamentos() {
+    const agendamentos = obterAgendamentos();
+
+    const linhas = [];
+
+    agendamentos.forEach(item => {
+        item.atendimentos.forEach(atendimento => {
+            linhas.push([
+                item.paciente || "Paciente não informado",
+                item.tipoServico || "",
+                item.data || "",
+                item.modalidade || "",
+                item.medico || "",
+                atendimento.nome || item.tipoServico || "",
+                atendimento.hora || "",
+                item.criadoEm || ""
+            ]);
+        });
+    });
+
+    return linhas;
+}
+
+function obterCabecalhoPlanilha() {
+    return [
+        "Paciente",
+        "Tipo de Atendimento",
+        "Data",
+        "Modalidade",
+        "Médico",
+        "Exame/Consulta",
+        "Horário",
+        "Criado em"
+    ];
+}
+
+function calcularTotaisRelatorio() {
+    const agendamentos = obterAgendamentos();
+
+    return {
+        pacientes: agendamentos.length,
+        exames: agendamentos
+            .filter(item => item.tipoServico === "Exame" || item.tipoServico === "Exame Encaixe")
+            .reduce((total, item) => total + item.atendimentos.length, 0),
+        consultas: agendamentos
+            .filter(item => item.tipoServico === "Consulta")
+            .reduce((total, item) => total + item.atendimentos.length, 0),
+        retornos: agendamentos
+            .filter(item => item.tipoServico === "Retorno")
+            .reduce((total, item) => total + item.atendimentos.length, 0)
+    };
+}
+
+function gerarResumoTotaisHTML() {
+    const totais = calcularTotaisRelatorio();
+
+    return `
+        <table class="tabela-totais">
+            <tbody>
+                <tr><th colspan="2">Totais do Relatório</th></tr>
+                <tr><td>Total de pacientes agendados</td><td>${totais.pacientes}</td></tr>
+                <tr><td>Total de exames agendados</td><td>${totais.exames}</td></tr>
+                <tr><td>Total de consultas agendadas</td><td>${totais.consultas}</td></tr>
+                <tr><td>Total de retornos agendados</td><td>${totais.retornos}</td></tr>
+            </tbody>
+        </table>
+    `;
+}
+
+function baixarExcelAgendamentos() {
+    const linhas = montarLinhasAgendamentos();
+
+    if(linhas.length === 0) {
+        alert("Nenhum agendamento salvo para baixar.");
+        return;
+    }
+
+    const tabela = gerarTabelaHTML([obterCabecalhoPlanilha(), ...linhas]);
+    const totais = gerarResumoTotaisHTML();
+    const conteudo = `
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                table { border-collapse: collapse; width: 100%; font-family: Arial, sans-serif; }
+                th { background: #0f8fb3; color: #ffffff; font-weight: bold; }
+                th, td { border: 1px solid #b7d7e0; padding: 8px; text-align: left; }
+                tr:nth-child(even) td { background: #f3fafb; }
+                .tabela-totais { margin-top: 18px; max-width: 420px; }
+                .tabela-totais td:last-child { font-weight: bold; text-align: center; }
+            </style>
+        </head>
+        <body>${tabela}${totais}</body>
+        </html>
+    `;
+    const blob = new Blob(["\uFEFF" + conteudo], { type: "application/vnd.ms-excel;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "agendamentos-santorytec.xls";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
+function baixarPDFAgendamentos() {
+    const linhas = montarLinhasAgendamentos();
+
+    if(linhas.length === 0) {
+        alert("Nenhum agendamento salvo para baixar.");
+        return;
+    }
+
+    const tabela = gerarTabelaHTML([obterCabecalhoPlanilha(), ...linhas]);
+    const totais = gerarResumoTotaisHTML();
+    const janela = window.open("", "_blank");
+
+    if(!janela) {
+        alert("Permita pop-ups para gerar o PDF.");
+        return;
+    }
+
+    janela.document.write(`
+        <!DOCTYPE html>
+        <html lang="pt-br">
+        <head>
+            <meta charset="UTF-8">
+            <title>Agendamentos SantoryTec</title>
+            <style>
+                body { font-family: Arial, sans-serif; color: #123047; padding: 24px; }
+                h1 { margin: 0; font-size: 22px; color: #123047; }
+                p { margin: 6px 0 18px; color: #5f7380; font-size: 13px; }
+                table { border-collapse: collapse; width: 100%; font-size: 11px; }
+                th { background: #0f8fb3; color: #ffffff; text-align: left; }
+                th, td { border: 1px solid #b7d7e0; padding: 7px; vertical-align: top; }
+                tr:nth-child(even) td { background: #f3fafb; }
+                .tabela-totais { margin-top: 18px; max-width: 420px; font-size: 12px; }
+                .tabela-totais td:last-child { font-weight: bold; text-align: center; }
+                @media print {
+                    body { padding: 0; }
+                    button { display: none; }
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Agendamentos SantoryTec</h1>
+            <p>Relatório gerado em ${new Date().toLocaleString("pt-BR")}</p>
+            ${tabela}
+            ${totais}
+            <script>
+                window.onload = function() {
+                    window.print();
+                };
+            <\/script>
+        </body>
+        </html>
+    `);
+    janela.document.close();
+}
+
+function exportarBackupJSON() {
+    const agendamentos = obterAgendamentos();
+
+    if(agendamentos.length === 0) {
+        alert("Nenhum agendamento salvo para exportar.");
+        return;
+    }
+
+    const backup = {
+        sistema: "SantoryTec",
+        versao: 1,
+        exportadoEm: new Date().toLocaleString("pt-BR"),
+        agendamentos
+    };
+
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "backup-agendamentos-santorytec.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
+function importarBackupJSON(event) {
+    const arquivo = event.target.files[0];
+    event.target.value = "";
+
+    if(!arquivo) return;
+
+    const leitor = new FileReader();
+
+    leitor.onload = function() {
+        try {
+            const dados = JSON.parse(leitor.result);
+            const agendamentos = Array.isArray(dados) ? dados : dados.agendamentos;
+
+            if(!Array.isArray(agendamentos) || !agendamentos.every(agendamentoValido)) {
+                alert("Arquivo de backup inválido.");
+                return;
+            }
+
+            const confirmar = confirm("Importar este backup vai substituir os agendamentos salvos neste navegador. Deseja continuar?");
+            if(!confirmar) return;
+
+            salvarAgendamentos(agendamentos);
+            agendamentoEditandoId = null;
+            alert("Backup importado com sucesso!");
+        } catch (erro) {
+            alert("Não foi possível ler o arquivo de backup.");
+        }
+    };
+
+    leitor.readAsText(arquivo);
+}
+
+function agendamentoValido(item) {
+    return item &&
+        typeof item === "object" &&
+        Array.isArray(item.atendimentos) &&
+        item.atendimentos.every(atendimento =>
+            atendimento &&
+            typeof atendimento === "object" &&
+            "hora" in atendimento
+        );
+}
+
+function gerarTabelaHTML(linhas) {
+    return `
+        <table>
+            <thead>
+                <tr>${linhas[0].map(celula => `<th>${escaparHTML(celula)}</th>`).join("")}</tr>
+            </thead>
+            <tbody>
+                ${linhas.slice(1).map(linha =>
+                    `<tr>${linha.map(celula => `<td>${escaparHTML(celula)}</td>`).join("")}</tr>`
+                ).join("")}
+            </tbody>
+        </table>
+    `;
+}
+
+function escaparHTML(valor) {
+    return String(valor)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function copiar(mostrarAlerta = true){
+    let area=document.getElementById('resultado');
+    if(area.value === "") { alert("Gere uma mensagem primeiro!"); return; }
+    area.select();
+    document.execCommand('copy');
+    if(mostrarAlerta) alert("Copiado com sucesso!");
+}
+
+adicionarPacienteExame();
+adicionarPacienteExameEncaixe();
+document.getElementById("medicoConsultaUnico").innerHTML = medicosOptions;
+addItem();
+atualizarResumoAgendamentos();
+</script>
+
+</body>
+</html>
