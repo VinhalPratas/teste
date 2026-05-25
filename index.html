@@ -650,6 +650,7 @@ button {
                 <option value="FABRICIO GUIMARAES PRUDENTE">FABRICIO GUIMARAES PRUDENTE</option>
                 <option value="FERNANDA LOURENÇO RODRIGUES">FERNANDA LOURENÇO RODRIGUES</option>
                 <option value="FLAVIANO HENRIQUE PELLOSO BORGHESAN">FLAVIANO HENRIQUE PELLOSO BORGHESAN</option>
+                <option value="GABRIELA MARINHO NAVES RABELO">GABRIELA MARINHO NAVES RABELO</option>
                 <option value="GLEBER FERNANDES OLIVEIRA">GLEBER FERNANDES OLIVEIRA</option>
                 <option value="GUILHERME ABRAHÃO AFIUNE">GUILHERME ABRAHÃO AFIUNE</option>
                 <option value="GUILHERME CUNHA DOS SANTOS TELES">GUILHERME CUNHA DOS SANTOS TELES</option>
@@ -810,6 +811,7 @@ const medicosOptions = `
     <option value="FABRICIO GUIMARAES PRUDENTE">FABRICIO GUIMARAES PRUDENTE</option>
     <option value="FERNANDA LOURENÇO RODRIGUES">FERNANDA LOURENÇO RODRIGUES</option>
     <option value="FLAVIANO HENRIQUE PELLOSO BORGHESAN">FLAVIANO HENRIQUE PELLOSO BORGHESAN</option>
+    <option value="GABRIELA MARINHO NAVES RABELO">GABRIELA MARINHO NAVES RABELO</option>
     <option value="GLEBER FERNANDES OLIVEIRA">GLEBER FERNANDES OLIVEIRA</option>
     <option value="GUILHERME ABRAHÃO AFIUNE">GUILHERME ABRAHÃO AFIUNE</option>
     <option value="GUILHERME CUNHA DOS SANTOS TELES">GUILHERME CUNHA DOS SANTOS TELES</option>
@@ -855,8 +857,7 @@ const radiologistasOptions = `
 `;
 
 const examesOrcamento = [
-    "Ultrassom Abdome Inferior Feminino (Bexiga, Útero, Ovário e Anexo)",
-    "Ultrassom Abdome Inferior Masculino (Bexiga, Próstata e Vesículas)",
+    "Ultrassom Abdome Inferior (Bexiga, Útero, Ovário e Anexo)",
     "Ultrassom Abdome Superior",
     "Ultrassom Abdome Total",
     "Ultrassom Antebraço Direito",
@@ -864,8 +865,6 @@ const examesOrcamento = [
     "Ultrassom Antepé Direito",
     "Ultrassom Antepé Esquerdo",
     "Ultrassom Aparelho Urinário (Rins, Ureteres e Bexiga)",
-    "Ultrassom Aparelho Urinário Feminino (Rins, Ureteres e Bexiga)",
-    "Ultrassom Aparelho Urinário Masculino (Rins, Ureteres, Bexiga e Próstata)",
     "Ultrassom Arcos Costais",
     "Ultrassom Articularérias Temporais",
     "Ultrassom Articulação Coxo-Femoral Direito",
@@ -917,8 +916,6 @@ const examesOrcamento = [
     "Ultrassom Joelho Direito",
     "Ultrassom Joelho Esquerdo",
     "Ultrassom Mamas",
-    "Ultrassom Mamas para Core Biopsy",
-    "Ultrassom Mamas para PAAF",
     "Ultrassom Mandíbula",
     "Ultrassom Mão Direito",
     "Ultrassom Mão Esquerdo",
@@ -994,7 +991,6 @@ const examesOrcamento = [
     "Ultrassom Trapézio Direito",
     "Ultrassom Trapézio Esquerdo",
     "Ultrassom Vulva",
-    "Ecodoppler",
     "Complemento de Exame - Ressonância Magnética",
     "Ressonância Magnética",
     "Ressonância Magnética - Complemento de Exame",
@@ -1108,42 +1104,6 @@ const examesOrcamento = [
     "Ressonância Magnética Tornozelo Direito",
     "Ressonância Magnética Tornozelo Esquerdo",
     "Ressonância Magnética Uroressonância",
-    "Angiotomografia",
-    "ANGIOTOMOGRAFIA ARTERIAL E VENOSA DE OUVIDOS",
-    "ANGIOTOMOGRAFIA ARTERIAL DE MEMBRO SUPERIOR - DIR",
-    "ANGIOTOMOGRAFIA ARTERIAL E VENOSA DE PESCOÇO",
-    "ANGIOTOMOGRAFIA DE CERVICAL/ CAROTIDAS",
-    "ANGIOTOMOGRAFIA ARTERIAL DE MEMBRO INFERIOR - ESQ",
-    "ANGIOTOMOGRAFIA VENOSA DE PELVE",
-    "ANGIOTOMOGRAFIA VENOSA DE PESCOÇO",
-    "ANGIOTOMOGRAFIA VENOSA DE MEMBRO SUPERIOR - ESQ",
-    "ANGIOTOMOGRAFIA DE AORTA TORÁCICA",
-    "ANGIOTOMOGRAFIA VENOSA DE MEMBRO SUPERIOR - DIR",
-    "ANGIOTOMOGRAFIA VENOSA DE ABDOME SUPERIOR",
-    "ANGIOTOMOGRAFIA DE CRANIO",
-    "ANGIOTOMOGRAFIA ARTERIAL DE ABDOME SUPERIOR",
-    "ANGIOTOMOGRAFIA VENOSA DE MEMBRO INFERIOR - ESQ",
-    "ANGIOTOMOGRAFIA ARTERIAL E VENOSA DE TORAX",
-    "ANGIOTOMOGRAFIA ARTERIAL DE CRANIO",
-    "ANGIOTOMOGRAFIA VENOSA DE CRANIO",
-    "ANGIOTOMOGRAFIA ARTERIAL DE PESCOÇO",
-    "ANGIOTOMOGRAFIA ARTERIAL DE MEMBRO SUPERIOR - ESQ",
-    "ANGIOTOMOGRAFIA ABDOMINAL (VENOSA)",
-    "ANGIOTOMOGRAFIA ARTERIAL DE PELVE",
-    "ANGIOTOMOGRAFIA VENOSA DE TORAX",
-    "ANGIOTOMOGRAFIA VENOSA DE MEMBRO INFERIOR - DIR",
-    "ANGIOTOMOGRAFIA ARTERIAL E VENOSA DE CRANIO",
-    "ANGIOTOMOGRAFIA DE AORTA ABDOMINAL (ARTERIAL)",
-    "ANGIOTOMOGRAFIA ARTERIAL E VENOSA DE PELVE",
-    "ANGIOTOMOGRAFIA DE ABDOME INFERIOR",
-    "TOMOGRAFIA",
-    "ANGIOTOMOGRAFIA ABDOMINAL (ARTERIAL)",
-    "ANGIOTOMOGRAFIA ARTERIAL E VENOSA DE FACE",
-    "ANGIOTOMOGRAFIA ARTERIAL DE TORAX",
-    "ANGIOTOMOGRAFIA ARTERIAL DE MEMBRO INFERIOR - DIR",
-    "ANGIOTOMOGRAFIA DE AORTA ILIACA",
-    "ANGIOTOMOGRAFIA CORONARIANA",
-    "ANGIOTOMOGRAFIA DE ARTÉRIAS RENAIS"
 ];
 
 function trocar(manterEdicao = false){
